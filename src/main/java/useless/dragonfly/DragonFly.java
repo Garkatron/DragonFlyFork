@@ -9,7 +9,6 @@ import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import turniplabs.halplibe.util.GameStartEntrypoint;
-import useless.dragonfly.debug.DebugMain;
 import useless.dragonfly.model.block.adapters.CubeDataJsonAdapter;
 import useless.dragonfly.model.block.adapters.FaceDataJsonAdapter;
 import useless.dragonfly.model.block.adapters.ModelDataJsonAdapter;
@@ -38,6 +37,8 @@ import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.utilities.vector.Vector3f;
 import useless.dragonfly.utilities.vector.Vector3fJsonAdapter;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class DragonFly implements GameStartEntrypoint {
     public static final String MOD_ID = "dragonfly";
@@ -71,8 +72,14 @@ public class DragonFly implements GameStartEntrypoint {
 	public void beforeGameStart() {
 		if (isDev){
 			LOGGER.info("DragonFly " + version + " loading debug assets");
-			DebugMain.init();
-		}
+			try {
+				Class<?> debug = Class.forName("useless.dragonfly.debug.DebugMain");
+				debug.getMethod("init").invoke(null);
+			} catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+				LOGGER.warn("DragonFly " + version + " failed to find debug assets!");
+				e.printStackTrace();
+            }
+        }
 		LOGGER.info("DragonFly initialized.");
 	}
 

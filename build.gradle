@@ -106,7 +106,8 @@ dependencies {
 	implementation 'com.google.guava:guava:30.0-jre'
 	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 
-	var log4jVersion = "2.17.1"
+//	var log4jVersion = "2.17.1"
+	var log4jVersion = "2.20.0"
 	implementation("org.apache.logging.log4j:log4j-core:${log4jVersion}")
 	implementation("org.apache.logging.log4j:log4j-api:${log4jVersion}")
 	implementation("org.apache.logging.log4j:log4j-1.2-api:${log4jVersion}")
@@ -116,7 +117,7 @@ dependencies {
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
-	withSourcesJar()
+//	withSourcesJar()
 }
 
 tasks.withType(JavaCompile) {
@@ -124,6 +125,10 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
+	if (findProperty('no-assets') ? findProperty('no-assets') : false){
+		exclude('useless/dragonfly/debug/**')
+		processResources.exclude('assets/**')
+	}
 	from("LICENSE") {
 		rename { "${it}_${archivesBaseName}" }
 	}
