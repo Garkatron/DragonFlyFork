@@ -616,6 +616,15 @@ public class BlockModelRenderer {
 							throw new RuntimeException("Specified side does not exist on a cube!!!");
 					}
 				}
+
+				if (face.useTint()){
+					Color color = new Color(BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(mc.theWorld, x, y, z));
+					red *= color.getRed() / 255.0f;
+					green *= color.getGreen() / 255.0f;
+					blue *= color.getBlue() / 255.0f;
+				}
+
+
 				tessellator.setColorOpaque_F(!face.getFullBright() ? red * sideBrightness : 1f, !face.getFullBright() ? green * sideBrightness : 1f, !face.getFullBright() ? blue * sideBrightness : 1f);
 				renderModelFace(face, x, y, z);
 				renderedSomething = true;

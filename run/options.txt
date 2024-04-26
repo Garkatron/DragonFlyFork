@@ -18,7 +18,7 @@ controllerMenuSensitivity:0.5
 controllerDeadzoneL:0.25
 controllerDeadzoneR:0.25
 blockOutlineWidth:0.25
-flightSpeed:1.0
+flightSpeed:0.35
 flightSmoothness:0.5
 invertYMouse:false
 rawMouseInput:false
@@ -27,7 +27,7 @@ advancedOpengl:false
 fancyGraphics:1
 treeShadows:true
 ambientOcclusion:true
-3Ditems:false
+3Ditems:true
 smoothCamera:false
 lockCamera:false
 biomeWater:true
@@ -87,12 +87,12 @@ turnWithVehicle:true
 downloadSoundfiles:true
 allowSoundOverrides:false
 loadAllSounds:false
-overlayShowCoords:false
-overlayShowDirection:false
-overlayShowTime:false
-overlayShowSeason:false
-overlayShowWeather:false
-overlayShowBiome:false
+overlayShowCoords:true
+overlayShowDirection:true
+overlayShowTime:true
+overlayShowSeason:true
+overlayShowWeather:true
+overlayShowBiome:true
 lastServer:localhost
 skin:BTA_Darkmode_Violet.zip
 selectedController:

@@ -2,7 +2,9 @@ package useless.dragonfly.debug;
 
 import net.minecraft.client.gui.guidebook.mobs.MobInfoRegistry;
 import net.minecraft.core.Global;
+import net.minecraft.core.block.entity.TileEntityFlag;
 import turniplabs.halplibe.helper.EntityHelper;
+import useless.dragonfly.debug.block.TileEntTest;
 import useless.dragonfly.debug.testentity.Dragon.DragonModel;
 import useless.dragonfly.debug.testentity.Dragon.DragonRenderer;
 import useless.dragonfly.debug.testentity.Dragon.EntityDragon;
@@ -31,6 +33,7 @@ public class DebugEntities {
 			EntityHelper.Client.assignEntityRenderer(EntityZombieTest.class, new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5f));
 			EntityHelper.Client.assignEntityRenderer(EntityDragon.class, new DragonRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "mod_dragon.json", DragonModel.class), 0.5f));
 			EntityHelper.Client.assignEntityRenderer(EntityWarden.class, new WardenRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "warden.json", WardenModel.class), 0.5f));
+			EntityHelper.Client.assignTileEntityRenderer(TileEntityFlag.class, new TileEntTest());
 		}
 	}
 }
