@@ -8,7 +8,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import org.apache.commons.lang3.NotImplementedException;
@@ -52,13 +51,7 @@ public class BenchEntityCubeJsonAdapter implements JsonDeserializer<BenchEntityC
 				faceUv = new Gson().fromJson(uvElement, BenchFaceUVsItem.class);
 			}
 
-			JsonElement mirrorElement = obj.get("mirror");
-			if (mirrorElement != null && mirrorElement.isJsonPrimitive()) {
-				JsonPrimitive primitive = mirrorElement.getAsJsonPrimitive();
-				if (primitive.isBoolean()) {
-					mirror = primitive.getAsBoolean();
-				}
-			}
+			if (obj.has("mirror")) mirror = obj.get("mirror").getAsBoolean();
 		}
 		return new BenchEntityCube(origin, pivot, rotation, size, inflate, uv, faceUv, mirror);
 	}

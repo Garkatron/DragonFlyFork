@@ -1,9 +1,9 @@
 package useless.dragonfly.debug.testentity.Dragon;
 
-import net.minecraft.core.entity.monster.EntityGhast;
+import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.world.World;
 
-public class EntityDragon extends EntityGhast {
+public class EntityDragon extends EntityLiving {
 	public EntityDragon(World world) {
 		super(world);
 	}

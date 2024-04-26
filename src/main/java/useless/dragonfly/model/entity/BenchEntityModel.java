@@ -81,7 +81,8 @@ public class BenchEntityModel extends ModelBase {
 				boolean mirror = cube.isMirror();
 				float inflate = cube.getInflate();
 
-				cube.addBox(texWidth, texHeight, convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2), false);
+//				cube.addBox(texWidth, texHeight, convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2), true);
+				cube.addBox(texWidth, texHeight, convertOrigin(bones, cube, 0), convertOrigin(bones, cube, 1), convertOrigin(bones, cube, 2), true);
 
 
 				if (!cube.isCompiled()) {
@@ -104,10 +105,8 @@ public class BenchEntityModel extends ModelBase {
 
 				}
 
+				GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 
-				if (bones.rotationPointX != 0.0f || bones.rotationPointY != 0.0f || bones.rotationPointZ != 0.0f) {
-					GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
-				}
 				float rx = 0;
 				float ry = 0;
 				float rz = 0;
@@ -119,7 +118,7 @@ public class BenchEntityModel extends ModelBase {
 				if (cubeRotation != null){
 					rx += cubeRotation.x;
 					ry += cubeRotation.y;
-					rz += cubeRotation.z;
+					rz -= cubeRotation.z;
 				}
 				GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
@@ -138,7 +137,6 @@ public class BenchEntityModel extends ModelBase {
 				if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
 					GL11.glScalef(bones.scaleX, bones.scaleY, bones.scaleZ);
 				}
-
 
 				GL11.glCallList(cube.getDisplayList());
 
@@ -286,16 +284,12 @@ public class BenchEntityModel extends ModelBase {
 	}
 
 	public void deco() {
-		if (!getIndexBones().isEmpty()) {
-			getIndexBones().entrySet().forEach(bonesItem -> {
-				if (bonesItem.getValue().getCubes() != null) {
-					bonesItem.getValue().getCubes().forEach(cubesItem -> {
-						if (!cubesItem.isHasMirror()) {
-							cubesItem.setMirror(bonesItem.getValue().isMirror());
-						}
-					});
+		for (BenchEntityBones bone : geometry.benchEntityGeometry.get(0).getBones()){
+			for (BenchEntityCube cube : bone.getCubes()){
+				if (!cube.isHasMirror()) {
+					cube.setMirror(bone.isMirror());
 				}
-			});
+			}
 		}
 	}
 }

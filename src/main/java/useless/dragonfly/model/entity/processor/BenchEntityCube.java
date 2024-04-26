@@ -2,9 +2,7 @@ package useless.dragonfly.model.entity.processor;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.GLAllocation;
-import net.minecraft.client.render.Polygon;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.Vertex;
 import net.minecraft.core.util.helper.Direction;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
@@ -16,8 +14,8 @@ import java.util.List;
 public class BenchEntityCube {
 
 	private static final float COMPARE_CONST = 0.001f;
-	private Vertex[] corners;
-	private List<Polygon> polygons;
+	private VertexDF[] corners;
+	private List<PolygonDF> polygons;
 	private Boolean mirror;
 	private final float inflate;
 	private final Vector3f size;
@@ -42,7 +40,8 @@ public class BenchEntityCube {
 	private int displayList = 0;
 
 	public boolean isMirror() {
-		return mirror != null && mirror;
+		if (mirror == null) return false;
+		return mirror;
 	}
 
 	public boolean isHasMirror() {
@@ -86,7 +85,7 @@ public class BenchEntityCube {
 
 	public void addBox(int texWidth, int texHeight, float x, float y, float z, boolean flipBottomUV) {
 		if (faceUv != null) {
-			this.corners = new Vertex[8];
+			this.corners = new VertexDF[8];
 			this.polygons = Lists.newArrayList();
 
 			float minX = x;
@@ -102,19 +101,14 @@ public class BenchEntityCube {
 			maxY += inflate;
 			maxZ += inflate;
 
-			if (this.isMirror()) {
-				float temp = maxX;
-				maxX = minX;
-				minX = temp;
-			}
-			Vertex ptvMinXMinYMinZ = new Vertex(minX, minY, minZ, 0.0f, 0.0f);
-			Vertex ptvMaxXMinYMinZ = new Vertex(maxX, minY, minZ, 0.0f, 8.0f);
-			Vertex ptvMaxXMaxYMinZ = new Vertex(maxX, maxY, minZ, 8.0f, 8.0f);
-			Vertex ptvMinXMaxYMinZ = new Vertex(minX, maxY, minZ, 8.0f, 0.0f);
-			Vertex ptvMinXMinYMaxZ = new Vertex(minX, minY, maxZ, 0.0f, 0.0f);
-			Vertex ptvMaxXMinYMaxZ = new Vertex(maxX, minY, maxZ, 0.0f, 8.0f);
-			Vertex ptvMaxXMaxYMaxZ = new Vertex(maxX, maxY, maxZ, 8.0f, 8.0f);
-			Vertex ptvMinXMaxYMaxZ = new Vertex(minX, maxY, maxZ, 8.0f, 0.0f);
+			VertexDF ptvMinXMinYMinZ = new VertexDF(minX, minY, minZ, 0.0f, 0.0f);
+			VertexDF ptvMaxXMinYMinZ = new VertexDF(maxX, minY, minZ, 0.0f, 8.0f);
+			VertexDF ptvMaxXMaxYMinZ = new VertexDF(maxX, maxY, minZ, 8.0f, 8.0f);
+			VertexDF ptvMinXMaxYMinZ = new VertexDF(minX, maxY, minZ, 8.0f, 0.0f);
+			VertexDF ptvMinXMinYMaxZ = new VertexDF(minX, minY, maxZ, 0.0f, 0.0f);
+			VertexDF ptvMaxXMinYMaxZ = new VertexDF(maxX, minY, maxZ, 0.0f, 8.0f);
+			VertexDF ptvMaxXMaxYMaxZ = new VertexDF(maxX, maxY, maxZ, 8.0f, 8.0f);
+			VertexDF ptvMinXMaxYMaxZ = new VertexDF(minX, maxY, maxZ, 8.0f, 0.0f);
 			this.corners[0] = ptvMinXMinYMinZ;
 			this.corners[1] = ptvMaxXMinYMinZ;
 			this.corners[2] = ptvMaxXMaxYMinZ;
@@ -123,56 +117,56 @@ public class BenchEntityCube {
 			this.corners[5] = ptvMaxXMinYMaxZ;
 			this.corners[6] = ptvMaxXMaxYMaxZ;
 			this.corners[7] = ptvMinXMaxYMaxZ;
+
 			BenchEntityFace benchFace = faceUv.getFace(Direction.EAST);
 			double texU = benchFace.getUv()[0];
 			double texV = benchFace.getUv()[1];
 			double uSize = benchFace.getUvSize()[0];
 			double vSize = benchFace.getUvSize()[1];
-			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight));
+
 			benchFace = faceUv.getFace(Direction.WEST);
 			texU = benchFace.getUv()[0];
 			texV = benchFace.getUv()[1];
 			uSize = benchFace.getUvSize()[0];
 			vSize = benchFace.getUvSize()[1];
-			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight));
+
 			benchFace = faceUv.getFace(Direction.DOWN);
 			texU = benchFace.getUv()[0];
 			texV = benchFace.getUv()[1];
 			uSize = benchFace.getUvSize()[0];
 			vSize = benchFace.getUvSize()[1];
-			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMaxXMinYMaxZ, ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight));
+
 			benchFace = faceUv.getFace(Direction.UP);
 			texU = benchFace.getUv()[0];
 			texV = benchFace.getUv()[1];
 			uSize = benchFace.getUvSize()[0];
 			vSize = benchFace.getUvSize()[1];
 			if (flipBottomUV) {
-				Polygon polygon = new Polygon(new Vertex[]{ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight);
+				PolygonDF polygon = makePolygon(new VertexDF[]{ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight);
 				polygon.invertNormal = true;
 				this.polygons.add(polygon);
 			} else {
-				Polygon polygon = new Polygon(new Vertex[]{ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ, ptvMinXMaxYMaxZ, ptvMaxXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight);
+				PolygonDF polygon = makePolygon(new VertexDF[]{ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ, ptvMinXMaxYMaxZ, ptvMaxXMaxYMaxZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight);
 				this.polygons.add(polygon);
 			}
+
 			benchFace = faceUv.getFace(Direction.NORTH);
 			texU = benchFace.getUv()[0];
 			texV = benchFace.getUv()[1];
 			uSize = benchFace.getUvSize()[0];
 			vSize = benchFace.getUvSize()[1];
-			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight));
 			benchFace = faceUv.getFace(Direction.SOUTH);
 			texU = benchFace.getUv()[0];
 			texV = benchFace.getUv()[1];
 			uSize = benchFace.getUvSize()[0];
 			vSize = benchFace.getUvSize()[1];
-			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
-			if (this.isMirror()) {
-				for (Polygon face : this.polygons) {
-					face.flipFace();
-				}
-			}
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, texU, texV, (texU + uSize), (texV + vSize), texWidth, texHeight));
 		} else if (polygons == null) {
-			this.corners = new Vertex[8];
+			this.corners = new VertexDF[8];
 			this.polygons = Lists.newArrayList();
 
 			float texU = uv.get(0);
@@ -193,19 +187,14 @@ public class BenchEntityCube {
 			maxY += inflate;
 			maxZ += inflate;
 
-			if (this.isMirror()) {
-				float temp = maxX;
-				maxX = minX;
-				minX = temp;
-			}
-			Vertex ptvMinXMinYMinZ = new Vertex(minX, minY, minZ, 0.0f, 0.0f);
-			Vertex ptvMaxXMinYMinZ = new Vertex(maxX, minY, minZ, 0.0f, 8.0f);
-			Vertex ptvMaxXMaxYMinZ = new Vertex(maxX, maxY, minZ, 8.0f, 8.0f);
-			Vertex ptvMinXMaxYMinZ = new Vertex(minX, maxY, minZ, 8.0f, 0.0f);
-			Vertex ptvMinXMinYMaxZ = new Vertex(minX, minY, maxZ, 0.0f, 0.0f);
-			Vertex ptvMaxXMinYMaxZ = new Vertex(maxX, minY, maxZ, 0.0f, 8.0f);
-			Vertex ptvMaxXMaxYMaxZ = new Vertex(maxX, maxY, maxZ, 8.0f, 8.0f);
-			Vertex ptvMinXMaxYMaxZ = new Vertex(minX, maxY, maxZ, 8.0f, 0.0f);
+			VertexDF ptvMinXMinYMinZ = new VertexDF(minX, minY, minZ, 0.0f, 0.0f);
+			VertexDF ptvMaxXMinYMinZ = new VertexDF(maxX, minY, minZ, 0.0f, 8.0f);
+			VertexDF ptvMaxXMaxYMinZ = new VertexDF(maxX, maxY, minZ, 8.0f, 8.0f);
+			VertexDF ptvMinXMaxYMinZ = new VertexDF(minX, maxY, minZ, 8.0f, 0.0f);
+			VertexDF ptvMinXMinYMaxZ = new VertexDF(minX, minY, maxZ, 0.0f, 0.0f);
+			VertexDF ptvMaxXMinYMaxZ = new VertexDF(maxX, minY, maxZ, 0.0f, 8.0f);
+			VertexDF ptvMaxXMaxYMaxZ = new VertexDF(maxX, maxY, maxZ, 8.0f, 8.0f);
+			VertexDF ptvMinXMaxYMaxZ = new VertexDF(minX, maxY, maxZ, 8.0f, 0.0f);
 			this.corners[0] = ptvMinXMinYMinZ;
 			this.corners[1] = ptvMaxXMinYMinZ;
 			this.corners[2] = ptvMaxXMaxYMinZ;
@@ -214,28 +203,27 @@ public class BenchEntityCube {
 			this.corners[5] = ptvMaxXMinYMaxZ;
 			this.corners[6] = ptvMaxXMaxYMaxZ;
 			this.corners[7] = ptvMinXMaxYMaxZ;
-			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, (int) (texU + sizeZ + sizeX), (int) (texV + sizeZ), (int) (texU + sizeZ + sizeX + sizeZ), (int) (texV + sizeZ + sizeY), texWidth, texHeight));
-			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ}, (int) texU, (int) (texV + sizeZ), (int) (texU + sizeZ), (int) (texV + sizeZ + sizeY), texWidth, texHeight));
-			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ}, (int) (texU + sizeZ), (int) texV, (int) (texU + sizeZ + sizeX), (int) (texV + sizeZ), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, (texU + sizeZ + sizeX), (texV + sizeZ), (texU + sizeZ + sizeX + sizeZ), (texV + sizeZ + sizeY), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ}, texU, (texV + sizeZ), (texU + sizeZ), (texV + sizeZ + sizeY), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMaxXMinYMaxZ, ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ}, (texU + sizeZ), texV, (texU + sizeZ + sizeX), (texV + sizeZ), texWidth, texHeight));
 			if (flipBottomUV) {
-				Polygon polygon = new Polygon(new Vertex[]{ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) (texU + sizeZ + sizeX), (int) texV, (int) (texU + sizeZ + sizeX + sizeX), (int) (texV + sizeZ), texWidth, texHeight);
+				PolygonDF polygon = makePolygon(new VertexDF[]{ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (texU + sizeZ + sizeX), texV, (texU + sizeZ + sizeX + sizeX), (texV + sizeZ), texWidth, texHeight);
 				polygon.invertNormal = true;
 				this.polygons.add(polygon);
 			} else {
-				Polygon polygon = new Polygon(new Vertex[]{ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ, ptvMinXMaxYMaxZ, ptvMaxXMaxYMaxZ}, (int) (texU + sizeZ + sizeX), (int) texV, (int) (texU + sizeZ + sizeX + sizeX), (int) (texV + sizeZ), texWidth, texHeight);
+				PolygonDF polygon = makePolygon(new VertexDF[]{ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ, ptvMinXMaxYMaxZ, ptvMaxXMaxYMaxZ}, (texU + sizeZ + sizeX), texV, (texU + sizeZ + sizeX + sizeX), (texV + sizeZ), texWidth, texHeight);
 				this.polygons.add(polygon);
 			}
-			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) (texU + sizeZ), (int) (texV + sizeZ), (int) (texU + sizeZ + sizeX), (int) (texV + sizeZ + sizeY), texWidth, texHeight));
-			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, (int) (texU + sizeZ + sizeX + sizeZ), (int) (texV + sizeZ), (int) (texU + sizeZ + sizeX + sizeZ + sizeX), (int) (texV + sizeZ + sizeY), texWidth, texHeight));
-			if (this.isMirror()) {
-				for (Polygon face : this.polygons) {
-					face.flipFace();
-				}
-			}
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (texU + sizeZ), (texV + sizeZ), (texU + sizeZ + sizeX), (texV + sizeZ + sizeY), texWidth, texHeight));
+			this.polygons.add(makePolygon(new VertexDF[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, (texU + sizeZ + sizeX + sizeZ), (texV + sizeZ), (texU + sizeZ + sizeX + sizeZ + sizeX), (texV + sizeZ + sizeY), texWidth, texHeight));
 		}
 	}
 
-	private Polygon getTexturedQuad(Vertex[] positionsIn, float texWidth, float texHeight, Direction direction, BenchFaceUVsItem faces) {
+	private PolygonDF makePolygon(VertexDF[] vertices, double minU, double minV, double maxU, double maxV, double texWidth, double texHeight){
+        return new PolygonDF(vertices, (int) minU, (int) minV, (int) maxU, (int) maxV, (int) texWidth, (int) texHeight, isMirror());
+	}
+
+	private PolygonDF getTexturedQuad(VertexDF[] positionsIn, float texWidth, float texHeight, Direction direction, BenchFaceUVsItem faces) {
 		BenchEntityFace face = faces.getFace(direction);
 		if (Utilities.equalFloat(face.getUvSize()[0], 0.0F) && Utilities.equalFloat(face.getUvSize()[1], 0.0F))
 			return null;
@@ -243,7 +231,7 @@ public class BenchEntityCube {
 		double v1 = face.getUv()[1];
 		double u2 = u1 + face.getUvSize()[0];
 		double v2 = v1 + face.getUvSize()[1];
-		Polygon polygon = new Polygon(positionsIn, (int) u1, (int) v1, (int) u2, (int) v2, (int) texWidth, (int) texHeight);
+		PolygonDF polygon = makePolygon(positionsIn, u1, v1, u2, v2, texWidth, texHeight);
 
 		for (int i = 0; i < polygon.vertexPositions.length; ++i) {
 			polygon.vertexPositions[i].vector3D.xCoord += direction.getOffsetX();
@@ -254,12 +242,12 @@ public class BenchEntityCube {
 		return polygon;
 	}
 
-	public void compileDisplayList(float f) {
+	public void compileDisplayList(double f) {
 		if (this.polygons != null) {
 			this.displayList = GLAllocation.generateDisplayLists(1);
 			GL11.glNewList(this.displayList, 4864);
 			Tessellator tessellator = Tessellator.instance;
-            for (Polygon polygon : this.polygons) {
+            for (PolygonDF polygon : this.polygons) {
                 polygon.draw(tessellator, f);
             }
 			GL11.glEndList();

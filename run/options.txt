@@ -7,7 +7,6 @@ sound.entity:0.29347825
 sound.cave:1.0
 sound.gui:1.0
 sound.weather:1.0
-playServerSounds:true
 fov:0.8035714
 mouseSensitivity:0.5
 screenPadding:0.0
@@ -39,6 +38,7 @@ shaderOverride:
 autoHit:true
 foodHealthRegenOverlay:true
 fpsInOverlay:false
+versionInOverlay:false
 controllerSwapShoulderButtons:false
 controllerSwapAB:false
 controllerSwapXY:false
@@ -63,7 +63,7 @@ guiBackgroundColor:r=16,g=16,b=16,a=192
 difficulty:NORMAL
 thirdPersonView:0
 renderDistance:EXTREME
-limitFramerate:0
+enableVsync:false
 customFpsLimit:144
 guiScale:0
 overlayMode:0
@@ -84,6 +84,7 @@ old:false
 enableItemClumping:false
 alwaysShowDescriptions:false
 turnWithVehicle:true
+disableCrashHandler:false
 downloadSoundfiles:true
 allowSoundOverrides:false
 loadAllSounds:false
@@ -104,6 +105,7 @@ borderlessFullscreen:true
 startInFullscreen:true
 tooltipStyle:default
 fog:true
+hideUndiscoveredItems:true
 muteOnLostFocus:false
 aurora:true
 mobVariants:true
@@ -120,6 +122,7 @@ key_key.jump:k57
 key_key.inventory:k18
 key_key.drop:k16
 key_key.chat:k20
+key_key.command:k53
 key_key.fog:k33
 key_key.gamma:k34
 key_key.sneak:k42
