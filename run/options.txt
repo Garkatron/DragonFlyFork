@@ -95,7 +95,7 @@ overlayShowSeason:true
 overlayShowWeather:true
 overlayShowBiome:true
 lastServer:localhost
-skin:BTA_Darkmode_Violet.zip
+skin:TestPack-splitter-BTA_Darkmode_Violet.zip
 selectedController:
 language:en_US
 mipmapLevels:0

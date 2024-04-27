@@ -26,6 +26,8 @@ public class EntityWarden extends EntityHuman {
 		}
 		super.attackEntity(entity, distance);
 	}
+	@Override
+	public void onLivingUpdate() {}
 
 	@Override
 	public void handleEntityEvent(byte byte0, float attackedAtYaw) {

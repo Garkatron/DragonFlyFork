@@ -13,6 +13,8 @@ public class EntityZombieTest extends EntityHuman {
 	public ItemStack getHeldItem() {
 		return new ItemStack(Item.toolSwordWood);
 	}
+	@Override
+	public void onLivingUpdate() {}
 
 	@Override
 	public String getEntityTexture() {

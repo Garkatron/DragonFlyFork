@@ -8,6 +8,8 @@ public class EntityHTest extends EntityLiving {
 		super(world);
 	}
 	@Override
+	public void onLivingUpdate() {}
+	@Override
 	public String getEntityTexture() {
 		return "/assets/dragonfly/entity/BlackMoa.png";
 	}

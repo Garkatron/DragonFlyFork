@@ -8,6 +8,8 @@ public class EntityDragon extends EntityLiving {
 		super(world);
 	}
 	@Override
+	public void onLivingUpdate() {}
+	@Override
 	public String getEntityTexture() {
 		return "/assets/dragonfly/entity/dragontex2variant.png";
 	}
