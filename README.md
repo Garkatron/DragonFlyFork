@@ -19,7 +19,7 @@ DragonFly Allows the use of
 
 # Setup
 ### Add to project
-- Add version variable to "gradle.properties" `dragonfly_version=1.4.4-7.1`
+- Add version variable to "gradle.properties" `dragonfly_version=1.4.9-7.1`
 - Add mod repository to "build.gradle"
 ```
 ivy {
