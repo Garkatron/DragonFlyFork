@@ -13,8 +13,8 @@ public class DebugMain {
 			model.icon = TextureRegistry.getTexture("minecraft:item/stick");
 			return model;
 		});
-		DebugEntities.init();
 		DebugBlocks.init();
+		DebugEntities.init();
 //		StringBuilder builder = new StringBuilder();
 //		for (String string: ModelHelper.modelDataFiles.keySet()) {
 //			builder.append(string);
