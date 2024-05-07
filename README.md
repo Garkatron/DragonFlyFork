@@ -23,15 +23,11 @@ DragonFly Allows the use of
 - Add mod repository to "build.gradle"
 ```
 ivy {
-	url = "https://github.com/UselessSolutions"
-	patternLayout {
-		artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
-		m2compatible = true
-	}
-	metadataSources { artifact() }
+	mavenCentral()
+	maven { url = "https://jitpack.io" }
 }
 ```
-- Implement mod in "build.gradle" `modImplementation "DragonFly:dragonfly:${project.dragonfly_version}"`
+- Implement mod in "build.gradle" `modImplementation 'com.github.UselessSolutions:dragonfly:${project.dragonfly_version}"`
 
 # Credits:
 - UselessBullets - Block Model Support
