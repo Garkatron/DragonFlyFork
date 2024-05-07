@@ -3,6 +3,7 @@ package useless.dragonfly;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.render.stitcher.TextureRegistry;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,9 @@ import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.utilities.vector.Vector3f;
 import useless.dragonfly.utilities.vector.Vector3fJsonAdapter;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 
 public class DragonFly implements RecipeEntrypoint {
     public static final String MOD_ID = "dragonfly";
@@ -67,7 +70,12 @@ public class DragonFly implements RecipeEntrypoint {
 	}
 	@Override
 	public void onRecipesReady() {
-		if (isDev){
+        try {
+            TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas);
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (isDev){
 			LOGGER.info("DragonFly " + version + " loading debug assets");
 			try {
 				Class<?> debug = Class.forName("useless.dragonfly.debug.DebugMain");

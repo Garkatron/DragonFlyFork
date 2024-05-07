@@ -1,10 +1,10 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "block/stool_side",
-		"1": "block/stool_top",
+		"0": "block/seat_side",
+		"1": "block/seat_top",
 		"2": "block/planks_oak",
-		"particle": "block/stool_side"
+		"particle": "#0"
 	},
 	"elements": [
 		{

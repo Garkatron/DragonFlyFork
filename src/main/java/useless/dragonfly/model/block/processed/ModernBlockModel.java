@@ -72,7 +72,7 @@ public class ModernBlockModel {
 		if (textureKey.contains("#")){
 			result = textureMap.get(textureKey.substring(1));
 		} else {
-			result =textureMap.get(textureKey);
+			result = textureMap.get(textureKey);
 		}
 
 		if (result == null || result.equals(textureKey)) return NamespaceId.idFromString("minecraft:block/texture_missing");

@@ -59,7 +59,6 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 
 	@Override
 	public void renderBlockOnInventory(Tessellator tessellator, int metadata, float brightness, float alpha) {
-		super.renderBlockOnInventory(tessellator, metadata, brightness, alpha);
         float xOffset;
 		float yOffset;
 		float zOffset;
@@ -189,7 +188,6 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 			}
 			tessellator.draw();
 		}
-		GL11.glFrontFace(GL11.GL_CCW); // Deleting this breaks rendering for the whole world
 		GL11.glDisable(GL11.GL_CULL_FACE); // Deleting this causes render issues on vanilla transparent blocks
 		GL11.glTranslatef(xOffset, yOffset, zOffset);
 	}
@@ -205,7 +203,10 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 	}
 	@Override
 	public IconCoordinate getParticleTexture(Side side, int meta) {
-		return TextureRegistry.getTexture(baseModel.getTexture("particle").toString());
+		if (baseModel.textureMap.containsKey("particle")){
+			return TextureRegistry.getTexture(baseModel.getTexture("particle").toString());
+		}
+		return super.getParticleTexture(side, meta);
 	}
 	public InternalModel[] getModelsFromState(Block block, int x, int y, int z, boolean sourceFromWorld){
 		if (blockstateData == null || metaStateInterpreter == null){

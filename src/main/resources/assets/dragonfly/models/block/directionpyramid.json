@@ -1,13 +1,13 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "minecraft:block/debug_north",
-		"1": "minecraft:block/debug_east",
-		"2": "minecraft:block/debug_down",
-		"3": "minecraft:block/debug_up",
-		"4": "minecraft:block/debug_south",
-		"5": "minecraft:block/debug_west",
-		"particle": "minecraft:block/debug_north"
+		"0": "dragonfly:block/face_n",
+		"1": "dragonfly:block/face_e",
+		"2": "dragonfly:block/face_b",
+		"3": "dragonfly:block/face_t",
+		"4": "dragonfly:block/face_s",
+		"5": "dragonfly:block/face_w",
+		"particle": "#0"
 	},
 	"elements": [
 		{

@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
   "ambientocclusion": true,
   "textures": {
-    "0": "minecraft:block/stool_top"
+    "0": "minecraft:block/seat_top"
   },
 	"elements": [
 		{

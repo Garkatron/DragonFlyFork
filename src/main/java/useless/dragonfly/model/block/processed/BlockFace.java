@@ -104,8 +104,8 @@ public class BlockFace {
 	public double[] generateVertexUV(IconCoordinate texture, int point){
 		double atlasUMin = texture.getSubIconU(uMin());
 		double atlasUMax = texture.getSubIconU(uMax());
-		double atlasVMin = texture.getSubIconV(vMin());
-		double atlasVMax = texture.getSubIconV(vMax());
+		double atlasVMin = texture.getSubIconV(1 - vMin());
+		double atlasVMax = texture.getSubIconV(1 - vMax());
 //		if (uMin() < 0.0 || uMax() > 1.0) { // Cap U value
 //			atlasUMin = texX / terrainAtlasWidth;
 //			atlasUMax = (texX + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
