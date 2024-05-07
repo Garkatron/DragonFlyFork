@@ -7,7 +7,6 @@ import net.minecraft.client.render.stitcher.TextureRegistry;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import turniplabs.halplibe.util.RecipeEntrypoint;
 import org.useless.dragonfly.model.block.adapters.CubeDataJsonAdapter;
 import org.useless.dragonfly.model.block.adapters.FaceDataJsonAdapter;
 import org.useless.dragonfly.model.block.adapters.ModelDataJsonAdapter;
@@ -36,12 +35,14 @@ import org.useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 import org.useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import org.useless.dragonfly.utilities.vector.Vector3f;
 import org.useless.dragonfly.utilities.vector.Vector3fJsonAdapter;
+import turniplabs.halplibe.HalpLibe;
+import turniplabs.halplibe.util.GameStartEntrypoint;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 
-public class DragonFly implements RecipeEntrypoint {
+public class DragonFly implements GameStartEntrypoint {
     public static final String MOD_ID = "dragonfly";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Gson GSON = new GsonBuilder()
@@ -69,12 +70,19 @@ public class DragonFly implements RecipeEntrypoint {
 		isDev = version.equals("${version}") || version.contains("dev");
 	}
 	@Override
-	public void onRecipesReady() {
-        if (isDev){
-			try {
-				TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas);
-			} catch (URISyntaxException | IOException | NullPointerException e) {
-				LOGGER.error("Failed to initialize files!", e);
+	public void beforeGameStart() {
+
+	}
+
+	@Override
+	public void afterGameStart() {
+		if (isDev){
+			if (HalpLibe.isClient){
+				try {
+					TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas);
+				} catch (URISyntaxException | IOException | NullPointerException e) {
+					LOGGER.error("Failed to initialize files!", e);
+				}
 			}
 			LOGGER.info("DragonFly " + version + " loading debug assets");
 			try {
@@ -85,10 +93,5 @@ public class DragonFly implements RecipeEntrypoint {
 			}
 		}
 		LOGGER.info("DragonFly initialized.");
-	}
-
-	@Override
-	public void initNamespaces() {
-
 	}
 }
