@@ -117,7 +117,7 @@ dependencies {
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
-//	withSourcesJar()
+	withSourcesJar()
 }
 
 tasks.withType(JavaCompile) {
@@ -125,12 +125,18 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
-	if (findProperty('no-assets') ? findProperty('no-assets') : false){
-		exclude('useless/dragonfly/debug/**')
+	if (findProperty('no-assets') ? true : false){
+		exclude('org/useless/dragonfly/debug/**')
 		processResources.exclude('assets/**')
 	}
 	from("LICENSE") {
 		rename { "${it}_${archivesBaseName}" }
+	}
+}
+sourcesJar{
+	if (findProperty('no-assets') ? true : false){
+		exclude('org/useless/dragonfly/debug/**')
+		exclude('assets/**')
 	}
 }
 

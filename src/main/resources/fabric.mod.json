@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "recipesReady": [
-        "useless.dragonfly.DragonFly"
+        "org.useless.dragonfly.DragonFly"
     ]
   },
   "mixins": [
@@ -29,7 +29,7 @@
 
   "depends": {
     "fabricloader": ">=0.13.3",
-		"halplibe": ">=4.0.2",
+		"halplibe": "*",
 		"minecraft": "^7.2-beta"
   },
   "suggests": {
