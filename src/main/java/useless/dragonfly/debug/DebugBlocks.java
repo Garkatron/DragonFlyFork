@@ -76,8 +76,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 			ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, "brewing_stand.json"), new BrewingMetaState(), true))
 		.build(new BlockModel("brew" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/brewing_stand.json"))).withLitInteriorSurface(true);
 	public static final Block fence = new BlockBuilder(MOD_ID)
-		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/birch_fence_inventory.json"),
-			ModelHelper.getOrCreateBlockState(MOD_ID, "test_fence.json"), new FenceMetaState(), true))
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/birch_fence_inventory.json"), ModelHelper.getOrCreateBlockState(MOD_ID, "test_fence.json"), new FenceMetaState(), true))
 		.build(new BlockModel("fence" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/birch_fence_inventory.json"))).withLitInteriorSurface(true).withTags(BlockTags.FENCES_CONNECT);
 	public static final Block bookshelf = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/chiseled_bookshelf_inventory.json"),

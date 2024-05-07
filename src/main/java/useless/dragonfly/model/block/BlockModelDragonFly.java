@@ -45,6 +45,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 
 	@Override
 	public boolean render(Block block, int x, int y, int z) {
+
 		InternalModel[] models = getModelsFromState(block, x, y, z, false);
 		boolean didRender = false;
         for (InternalModel model : models) {

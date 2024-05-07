@@ -17,7 +17,7 @@ controllerMenuSensitivity:0.5
 controllerDeadzoneL:0.25
 controllerDeadzoneR:0.25
 blockOutlineWidth:0.25
-flightSpeed:0.35
+flightSpeed:0.6
 flightSmoothness:0.5
 invertYMouse:false
 rawMouseInput:false
@@ -51,7 +51,7 @@ showDebugScreen:false
 showFrameTimes:false
 showItemDebugInfo:true
 showChunkBorders:false
-showCollisionBoxes:false
+showCollisionBoxes:true
 swapCraftingButtons:false
 disableJInput:false
 enableVbos:false
