@@ -3,226 +3,59 @@ package useless.dragonfly.model.block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderBlockCache;
 import net.minecraft.client.render.RenderBlocks;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
-import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
+import net.minecraft.client.render.block.model.BlockModelStandard;
+import net.minecraft.client.render.tessellator.Tessellator;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.WorldSource;
-import org.lwjgl.opengl.GL11;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
-import useless.dragonfly.model.block.data.PositionData;
 import useless.dragonfly.model.block.processed.BlockCube;
 import useless.dragonfly.model.block.processed.BlockFace;
-import useless.dragonfly.model.block.processed.BlockModel;
+import useless.dragonfly.model.block.processed.ModernBlockModel;
 import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 
 import static useless.dragonfly.utilities.vector.Vector3f.origin;
 
 public class BlockModelRenderer {
 	public static Minecraft mc = Minecraft.getMinecraft(Minecraft.class);
-	private static boolean enableAO = false;
-	private static boolean renderAllFaces = false;
-	private static float colorRedTopRight;
-	private static float colorRedBottomRight;
-	private static float colorRedBottomLeft;
-	private static float colorGreenTopRight;
-	private static float colorRedTopLeft;
-	private static float colorGreenBottomRight;
-	private static float colorGreenBottomLeft;
-	private static float colorGreenTopLeft;
-	private static float colorBlueTopRight;
-	private static float colorBlueBottomRight;
-	private static float colorBlueBottomLeft;
-	private static float colorBlueTopLeft;
-	private static int overrideBlockTexture = -1;
 	private static int rotationX = 0;
 	private static int rotationY = 0;
-	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
-		int off = (int) ((System.currentTimeMillis()/20) % 360);
-		float xOffset;
-		float yOffset;
-		float zOffset;
-		float xScale;
-		float yScale;
-		float zScale;
-		float xRot;
-		float yRot;
-		float zRot;
-		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition(DragonFly.renderState);
-        switch (DragonFly.renderState) {
-			case "ground":
-				xScale = (float) displayData.scale[2] * 4;
-				yScale = (float) displayData.scale[1] * 4;
-				zScale = (float) displayData.scale[0] * 4;
-
-				xOffset = 0.5f * xScale;
-				yOffset = 0.5f * yScale;
-				zOffset = 0.5f * zScale;
-
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
-
-				xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1];
-				zRot = (float) displayData.rotation[2];
-				break;
-            case "head":
-				GL11.glFrontFace(GL11.GL_CW);
-				xScale = (float) displayData.scale[0];
-				yScale = (float) displayData.scale[1];
-				zScale = (float) displayData.scale[2];
-
-				xOffset = 0.5f * xScale;
-				yOffset = 0.5f * yScale;
-				zOffset = 0.5f * zScale;
-
-                xOffset -= (float) displayData.translation[0] / 16f;
-                yOffset -= (float) displayData.translation[1] / 16f;
-                zOffset -= (float) displayData.translation[2] / 16f;
-
-                xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1] + 180;
-				zRot = (float) displayData.rotation[2];
-                break;
-            case "firstperson_righthand":
-				xScale = (float) displayData.scale[2] * 2.5f;
-				yScale = (float) displayData.scale[1] * 2.5f;
-				zScale = (float) displayData.scale[0] * 2.5f;
-
-				xOffset = 0.5f * xScale;
-				yOffset = 0.5f * yScale;
-				zOffset = 0.5f * zScale;
-
-                xOffset -= (float) displayData.translation[2] / 8f;
-                yOffset -= (float) displayData.translation[1] / 8f;
-                zOffset -= (float) displayData.translation[0] / 8f;
-
-				xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1] + 45;
-				zRot = (float) displayData.rotation[2];
-                break;
-			case "thirdperson_righthand":
-				GL11.glFrontFace(GL11.GL_CW);
-				float scale = 8f/3;
-				xScale = (float) displayData.scale[2] * scale;
-				yScale = (float) displayData.scale[1] * scale;
-				zScale = (float) displayData.scale[0] * scale;
-
-				xOffset = 0.5f * xScale;
-				yOffset = 0.5f * yScale;
-				zOffset = 0.5f * zScale;
-
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
-
-				xRot = (float) -displayData.rotation[2] + 180;
-				yRot = (float) displayData.rotation[1] + 45;
-				zRot = (float) -displayData.rotation[0] - 100;
-				break;
-            case "gui":
-            default:
-				xScale = (float) displayData.scale[2] * 1.6f;
-				yScale = (float) displayData.scale[1] * 1.6f;
-				zScale = (float) displayData.scale[0] * 1.6f;
-
-				xOffset = 0.5f * xScale;
-				yOffset = 0.5f * yScale;
-				zOffset = 0.5f * zScale;
-
-                xOffset -= (float) displayData.translation[2] / 16f;
-                yOffset -= (float) displayData.translation[1] / 16f;
-                zOffset -= (float) displayData.translation[0] / 16f;
-
-				xRot = (float) displayData.rotation[0] - 30;
-				yRot = (float) displayData.rotation[1] + 45;
-				zRot = (float) displayData.rotation[2];
-        }
-        Tessellator tessellator = Tessellator.instance;
-
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-		GL11.glRotatef(yRot, 0, 1, 0);
-		GL11.glRotatef(xRot, 1, 0, 0);
-		GL11.glRotatef(zRot, 0, 0, 1);
-		GL11.glTranslatef(-xOffset, -yOffset, -zOffset);
-		GL11.glScalef(xScale, yScale, zScale);
-		if (modelDragonFly.baseModel.blockCubes != null){
-			tessellator.startDrawingQuads();
-			GL11.glColor4f(brightness, brightness, brightness, 1);
-			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
-				for (BlockFace face: cube.getFaces().values()) {
-					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
-					float r = 1;
-					float g = 1;
-					float b = 1;
-					if (face.useTint()){
-						int color = BlockColorDispatcher.getInstance().getDispatch(block).getFallbackColor(meta);
-						r = (float)(color >> 16 & 0xFF) / 255.0f;
-						g = (float)(color >> 8 & 0xFF) / 255.0f;
-						b = (float)(color & 0xFF) / 255.0f;
-					}
-					renderModelFaceWithColor(face, 0, 0, 0, r * brightness, g * brightness, b * brightness);
-				}
-			}
-			tessellator.draw();
-		}
-		GL11.glFrontFace(GL11.GL_CCW); // Deleting this breaks rendering for the whole world
-		GL11.glDisable(GL11.GL_CULL_FACE); // Deleting this causes render issues on vanilla transparent blocks
-		GL11.glTranslatef(xOffset, yOffset, zOffset);
-	}
-	public static boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
+	public static boolean renderModelNormal(Tessellator tessellator, ModernBlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
 		BlockModelRenderer.rotationX = rotationX;
 		BlockModelRenderer.rotationY = rotationY;
 		if (rotationX % 90 != 0 || rotationY % 90 != 0) throw new IllegalArgumentException("Rotation must be a multiple of 90!!");
 		boolean didRender;
 		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
-			didRender = renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
+			didRender = renderStandardModelWithAmbientOcclusion(tessellator, model, block, x, y, z);
 		} else {
-			didRender = renderStandardModelWithColorMultiplier(model, block, x, y, z, 1, 1, 1);
+			didRender = renderStandardModelWithColorMultiplier(tessellator, model, block, x, y, z, 1, 1, 1);
 		}
 		BlockModelRenderer.rotationX = 0;
 		BlockModelRenderer.rotationY = 0;
 		return didRender;
 	}
 
-	public static boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
-		renderAllFaces = true;
-		boolean result = renderModelNormal(model, block, x, y, z, rotationX, rotationY);
-		renderAllFaces = false;
-		return result;
-	}
-
-	public static boolean renderModelBlockUsingTexture(BlockModel model, Block block, int x, int y, int z, int textureIndex, int rotationX, int rotationY) {
-		overrideBlockTexture = textureIndex;
-		boolean result = renderModelNormal(model, block, x, y, z, rotationX, rotationY);
-		overrideBlockTexture = -1;
-		return result;
-	}
-	public static boolean renderStandardModelWithAmbientOcclusion(BlockModel model, Block block, int x, int y, int z) {
-		enableAO = true;
+	public static boolean renderStandardModelWithAmbientOcclusion(Tessellator tessellator, ModernBlockModel model, Block block, int x, int y, int z) {
+		getRenderBlocks().enableAO = true;
 		rba().getCache().setupCache(block, rba().getBlockAccess(), x, y, z);
 		boolean somethingRendered = false;
 		for (BlockCube cube: model.blockCubes) {
 			for (Side side: DragonFly.sides) {
-				somethingRendered |= renderModelSide(model, cube, block, x, y, z, side);
+				somethingRendered |= renderModelSide(tessellator, model, cube, block, x, y, z, side);
 			}
 		}
-		enableAO = false;
+		getRenderBlocks().enableAO = false;
 		return somethingRendered;
 	}
-	public static boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side) {
+	public static boolean renderModelSide(Tessellator tessellator, ModernBlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side) {
 		BlockFace blockFace = cube.getFaceFromSide(side, rotationX, rotationY);
 		if (blockFace == null) return false;
-		if (!renderAllFaces){
-			if (!renderSide(model, cube, side, x, y, z)) return false;
+		if (!getRenderBlocks().renderAllFaces){
+			if (!renderSide(tessellator, model, cube, side, x, y, z)) return false;
 		}
 		RenderBlockCache cache = rba().getCache();
 		int sideOffX = side.getOffsetX();
@@ -404,9 +237,9 @@ public class BlockModelRenderer {
 			}
 		}
 
-		colorRedTopLeft = colorRedBottomLeft = colorRedBottomRight = colorRedTopRight = r;
-		colorGreenTopLeft = colorGreenBottomLeft = colorGreenBottomRight = colorGreenTopRight = g;
-		colorBlueTopLeft = colorBlueBottomLeft = colorBlueBottomRight = colorBlueTopRight = b;
+		getRenderBlocks().colorRedTopLeft = getRenderBlocks().colorRedBottomLeft = getRenderBlocks().colorRedBottomRight = getRenderBlocks().colorRedTopRight = r;
+		getRenderBlocks().colorGreenTopLeft = getRenderBlocks().colorGreenBottomLeft = getRenderBlocks().colorGreenBottomRight = getRenderBlocks().colorGreenTopRight = g;
+		getRenderBlocks().colorBlueTopLeft = getRenderBlocks().colorBlueBottomLeft = getRenderBlocks().colorBlueBottomRight = getRenderBlocks().colorBlueTopRight = b;
 
 		float tl = topP * lightTL + (1.0f - topP) * lightBL;
 		float tr = topP * lightTR + (1.0f - topP) * lightBR;
@@ -416,32 +249,31 @@ public class BlockModelRenderer {
 		float brightnessBottomLeft = lefP * bl + (1.0f - lefP) * br;
 		float bottomRightBrightness = rigP * bl + (1.0f - rigP) * br;
 		float topRightBrightness = rigP * tl + (1.0f - rigP) * tr;
-		colorRedTopLeft *= brightnessTopRight;
-		colorGreenTopLeft *= brightnessTopRight;
-		colorBlueTopLeft *= brightnessTopRight;
-		colorRedBottomLeft *= brightnessBottomLeft;
-		colorGreenBottomLeft *= brightnessBottomLeft;
-		colorBlueBottomLeft *= brightnessBottomLeft;
-		colorRedBottomRight *= bottomRightBrightness;
-		colorGreenBottomRight *= bottomRightBrightness;
-		colorBlueBottomRight *= bottomRightBrightness;
-		colorRedTopRight *= topRightBrightness;
-		colorGreenTopRight *= topRightBrightness;
-		colorBlueTopRight *= topRightBrightness;
-		renderModelFace(blockFace, x, y, z);
+		getRenderBlocks().colorRedTopLeft *= brightnessTopRight;
+		getRenderBlocks().colorGreenTopLeft *= brightnessTopRight;
+		getRenderBlocks().colorBlueTopLeft *= brightnessTopRight;
+		getRenderBlocks().colorRedBottomLeft *= brightnessBottomLeft;
+		getRenderBlocks().colorGreenBottomLeft *= brightnessBottomLeft;
+		getRenderBlocks().colorBlueBottomLeft *= brightnessBottomLeft;
+		getRenderBlocks().colorRedBottomRight *= bottomRightBrightness;
+		getRenderBlocks().colorGreenBottomRight *= bottomRightBrightness;
+		getRenderBlocks().colorBlueBottomRight *= bottomRightBrightness;
+		getRenderBlocks().colorRedTopRight *= topRightBrightness;
+		getRenderBlocks().colorGreenTopRight *= topRightBrightness;
+		getRenderBlocks().colorBlueTopRight *= topRightBrightness;
+		renderModelFace(tessellator, blockFace, x, y, z);
 		return true;
 	}
-	public static void renderModelFace(BlockFace face, double x, double y, double z) {
-		Tessellator tessellator = Tessellator.instance;
+	public static void renderModelFace(Tessellator tessellator, BlockFace face, double x, double y, double z) {
 		double[] uvTL;
 		double[] uvBL;
 		double[] uvBR;
 		double[] uvTR;
-		if (overrideBlockTexture >= 0) {
-			uvTL = face.generateVertexUV(overrideBlockTexture, 0);
-			uvBL = face.generateVertexUV(overrideBlockTexture, 1);
-			uvBR = face.generateVertexUV(overrideBlockTexture, 2);
-			uvTR = face.generateVertexUV(overrideBlockTexture, 3);
+		if (getRenderBlocks().overrideBlockTexture != null) {
+			uvTL = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 0);
+			uvBL = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 1);
+			uvBR = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 2);
+			uvTR = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 3);
 		} else {
 			uvTL = face.getVertexUV(0);
 			uvBL = face.getVertexUV(1);
@@ -459,21 +291,21 @@ public class BlockModelRenderer {
 		Vector3f vbr = faceVertices[2];
 		Vector3f vtr = faceVertices[3];
 
-		if (enableAO) {
+		if (getRenderBlocks().enableAO) {
 			// Top Left
-			tessellator.setColorOpaque_F(colorRedTopLeft, colorGreenTopLeft, colorBlueTopLeft);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedTopLeft, getRenderBlocks().colorGreenTopLeft, getRenderBlocks().colorBlueTopLeft);
 			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]);
 
 			// Bottom Left
-			tessellator.setColorOpaque_F(colorRedBottomLeft, colorGreenBottomLeft, colorBlueBottomLeft);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedBottomLeft, getRenderBlocks().colorGreenBottomLeft, getRenderBlocks().colorBlueBottomLeft);
 			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]);
 
 			// Bottom Right
-			tessellator.setColorOpaque_F(colorRedBottomRight, colorGreenBottomRight, colorBlueBottomRight);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedBottomRight, getRenderBlocks().colorGreenBottomRight, getRenderBlocks().colorBlueBottomRight);
 			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]);
 
 			// Top Right
-			tessellator.setColorOpaque_F(colorRedTopRight, colorGreenTopRight, colorBlueTopRight);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedTopRight, getRenderBlocks().colorGreenTopRight, getRenderBlocks().colorBlueTopRight);
 			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]);
 		} else {
 			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]); // Top Left
@@ -482,18 +314,17 @@ public class BlockModelRenderer {
 			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]); // Top Right
 		}
 	}
-	public static void renderModelFaceWithColor(BlockFace face, double x, double y, double z, float r, float g, float b) {
-		Tessellator tessellator = Tessellator.instance;
+	public static void renderModelFaceWithColor(Tessellator tessellator, BlockFace face, double x, double y, double z, float r, float g, float b) {
 		double[] uvTL;
 		double[] uvBL;
 		double[] uvBR;
 		double[] uvTR;
-		if (overrideBlockTexture >= 0) {
-			uvTL = face.generateVertexUV(overrideBlockTexture, 0);
-			uvBL = face.generateVertexUV(overrideBlockTexture, 1);
-			uvBR = face.generateVertexUV(overrideBlockTexture, 2);
-			uvTR = face.generateVertexUV(overrideBlockTexture, 3);
-		} else {
+		if (getRenderBlocks().overrideBlockTexture != null) {
+			uvTL = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 0);
+			uvBL = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 1);
+			uvBR = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 2);
+			uvTR = face.generateVertexUV(getRenderBlocks().overrideBlockTexture, 3);
+		}  else {
 			uvTL = face.getVertexUV(0);
 			uvBL = face.getVertexUV(1);
 			uvBR = face.getVertexUV(2);
@@ -510,21 +341,21 @@ public class BlockModelRenderer {
 		Vector3f vbr = faceVertices[2];
 		Vector3f vtr = faceVertices[3];
 
-		if (enableAO) {
+		if (getRenderBlocks().enableAO) {
 			// Top Left
-			tessellator.setColorOpaque_F(colorRedTopLeft * r, colorGreenTopLeft * g, colorBlueTopLeft * b);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedTopLeft * r, getRenderBlocks().colorGreenTopLeft * g, getRenderBlocks().colorBlueTopLeft * b);
 			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]);
 
 			// Bottom Left
-			tessellator.setColorOpaque_F(colorRedBottomLeft * r, colorGreenBottomLeft * g, colorBlueBottomLeft * b);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedBottomLeft * r, getRenderBlocks().colorGreenBottomLeft * g, getRenderBlocks().colorBlueBottomLeft * b);
 			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]);
 
 			// Bottom Right
-			tessellator.setColorOpaque_F(colorRedBottomRight * r, colorGreenBottomRight * g, colorBlueBottomRight * b);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedBottomRight * r, getRenderBlocks().colorGreenBottomRight * g, getRenderBlocks().colorBlueBottomRight * b);
 			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]);
 
 			// Top Right
-			tessellator.setColorOpaque_F(colorRedTopRight * r, colorGreenTopRight * g, colorBlueTopRight * b);
+			tessellator.setColorOpaque_F(getRenderBlocks().colorRedTopRight * r, getRenderBlocks().colorGreenTopRight * g, getRenderBlocks().colorBlueTopRight * b);
 			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]);
 		} else {
 			tessellator.setColorOpaque_F(r, g, b);
@@ -534,9 +365,8 @@ public class BlockModelRenderer {
 			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]); // Top Right
 		}
 	}
-	public static boolean renderStandardModelWithColorMultiplier(BlockModel model, Block block, int x, int y, int z, float r, float g, float b) {
-		enableAO = false;
-		Tessellator tessellator = Tessellator.instance;
+	public static boolean renderStandardModelWithColorMultiplier(Tessellator tessellator, ModernBlockModel model, Block block, int x, int y, int z, float r, float g, float b) {
+		getRenderBlocks().enableAO = false;
 		boolean renderedSomething = false;
 		float cBottom = 0.5f;
 		float cTop = 1.0f;
@@ -572,8 +402,8 @@ public class BlockModelRenderer {
 				int _y = y + side.getOffsetY();
 				int _z = z + side.getOffsetZ();
 
-				if (!renderAllFaces){
-					if (!renderSide(model, cube, side, x, y, z)) continue;
+				if (!getRenderBlocks().renderAllFaces){
+					if (!renderSide(tessellator, model, cube, side, x, y, z)) continue;
 				}
 
 				float sideBrightness;
@@ -626,27 +456,19 @@ public class BlockModelRenderer {
 
 
 				tessellator.setColorOpaque_F(!face.getFullBright() ? red * sideBrightness : 1f, !face.getFullBright() ? green * sideBrightness : 1f, !face.getFullBright() ? blue * sideBrightness : 1f);
-				renderModelFace(face, x, y, z);
+				renderModelFace(tessellator, face, x, y, z);
 				renderedSomething = true;
 			}
 		}
 		return renderedSomething;
 	}
-	public static boolean renderSide(BlockModel model, BlockCube cube, Side side, int x, int y, int z){
+	public static boolean renderSide(Tessellator tessellator, ModernBlockModel model, BlockCube cube, Side side, int x, int y, int z){
 		WorldSource blockAccess = rba().getBlockAccess();
 		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
 		return !cube.getFaceFromSide(side, rotationX, rotationY).cullFace(x, y, z, renderOuterSide);
 	}
 	public static RenderBlocks getRenderBlocks(){
-		try {
-			Field f = BlockModelRenderBlocks.class.getDeclaredField("renderBlocks");
-			f.setAccessible(true);
-			RenderBlocks rb = (RenderBlocks) f.get(null);
-			f.setAccessible(false);
-			return rb;
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		return BlockModelStandard.renderBlocks;
 	}
 	public static RenderBlocksAccessor rba(){
 		return (RenderBlocksAccessor) getRenderBlocks();

@@ -3,7 +3,7 @@ package useless.dragonfly.helper;
 import com.google.gson.stream.JsonReader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
-import useless.dragonfly.model.block.processed.BlockModel;
+import useless.dragonfly.model.block.processed.ModernBlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
@@ -23,20 +23,20 @@ import java.util.Set;
 
 public class ModelHelper {
 	public static final Map<NamespaceId, ModelData> modelDataFiles = new HashMap<>();
-	public static final Map<NamespaceId, BlockModel> registeredModels = new HashMap<>();
+	public static final Map<NamespaceId, ModernBlockModel> registeredModels = new HashMap<>();
 	public static final Map<NamespaceId, BlockstateData> registeredBlockStates = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModel> registeredEntityModels = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModelData> entityDataFiles = new HashMap<>();
 
 	/**
-	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
+	 * Place mod models in the <i>assets/modid/models/block/</i> directory for them to be seen.
 	 */
-	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
+	public static ModernBlockModel getOrCreateBlockModel(String modId, String modelSource) {
 		NamespaceId namespaceId = new NamespaceId(modId, modelSource);
 		if (registeredModels.containsKey(namespaceId)){
 			return registeredModels.get(namespaceId);
 		}
-		BlockModel model = new BlockModel(namespaceId);
+		ModernBlockModel model = new ModernBlockModel(namespaceId);
 		registeredModels.put(namespaceId, model);
 		return model;
 	}
@@ -86,7 +86,7 @@ public class ModelHelper {
 	}
 
 	/**
-	 * Place mod models in the <i>assets/modid/model/</i> directory for them to be seen.
+	 * Place mod models in the <i>assets/modid/models/</i> directory for them to be seen.
 	 */
 	public static BenchEntityModel getOrCreateEntityModel(String modID, String modelSource, Class<? extends BenchEntityModel> baseModel) {
 		NamespaceId namespaceId = new NamespaceId(modID, modelSource);
@@ -121,7 +121,7 @@ public class ModelHelper {
 		if (!modelSource.contains(".json")){
 			modelSource += ".json";
 		}
-		return "/assets/" + namespaceId.getNamespace() + "/model/" + modelSource;
+		return "/assets/" + namespaceId.getNamespace() + "/models/" + modelSource;
 	}
 	public static String getBlockStateLocation(NamespaceId namespaceId){
 		String modelSource = namespaceId.getId();
@@ -141,7 +141,7 @@ public class ModelHelper {
 		for (NamespaceId modelDataKey : blockModelDataKeys){
 			createBlockModel(modelDataKey);
 		}
-		for (BlockModel model : registeredModels.values()){
+		for (ModernBlockModel model : registeredModels.values()){
 			model.refreshModel();
 		}
 		for (NamespaceId stateKey : blockStateKeys){

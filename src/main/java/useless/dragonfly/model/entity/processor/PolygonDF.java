@@ -1,6 +1,6 @@
 package useless.dragonfly.model.entity.processor;
 
-import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.tessellator.Tessellator;
 import net.minecraft.core.util.phys.Vec3d;
 
 public class PolygonDF {

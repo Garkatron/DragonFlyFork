@@ -15,7 +15,7 @@ public class BlockCube {
 	protected Vector3f fromScaled;
 	protected Vector3f toScaled;
 	protected boolean[] outerFace;
-	public final BlockModel parentModel;
+	public final ModernBlockModel parentModel;
 	protected HashMap<String, Vector3f> vertices = new HashMap<>();
 	protected HashMap<String, BlockFace> faces = new HashMap<>();
 	private float getScalar(float angle){
@@ -32,7 +32,7 @@ public class BlockCube {
 		}
 		return scalar;
 	}
-	public BlockCube(BlockModel model, CubeData cubeData){
+	public BlockCube(ModernBlockModel model, CubeData cubeData){
 		this.parentModel = model;
 		this.cubeData = cubeData;
 		outerFace = new boolean[6];

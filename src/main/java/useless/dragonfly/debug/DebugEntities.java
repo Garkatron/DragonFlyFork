@@ -1,10 +1,9 @@
 package useless.dragonfly.debug;
 
 import net.minecraft.client.gui.guidebook.mobs.MobInfoRegistry;
-import net.minecraft.core.Global;
-import net.minecraft.core.block.entity.TileEntityFlag;
+import net.minecraft.client.render.entity.LivingRenderer;
+import net.minecraft.client.render.model.ModelPlayer;
 import turniplabs.halplibe.helper.EntityHelper;
-import useless.dragonfly.debug.block.TileEntTest;
 import useless.dragonfly.debug.testentity.Dragon.DragonModel;
 import useless.dragonfly.debug.testentity.Dragon.DragonRenderer;
 import useless.dragonfly.debug.testentity.Dragon.EntityDragon;
@@ -22,18 +21,11 @@ import static useless.dragonfly.DragonFly.MOD_ID;
 
 public class DebugEntities {
 	public static void init(){
-		EntityHelper.Core.createEntity(EntityHTest.class, 1000, "ht");
-		EntityHelper.Core.createEntity(EntityZombieTest.class, 1000, "zt");
+		EntityHelper.createEntity(EntityHTest.class, 1000, "ht", () -> new LivingRenderer<>(new ModelPlayer(1), 1));
+		EntityHelper.createEntity(EntityZombieTest.class, 1000, "zt", () -> new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5f));
 		AnimationHelper.getOrCreateEntityAnimation(MOD_ID, "zombie_test.animation");
-		EntityHelper.Core.createEntity(EntityDragon.class, 1001, "dragon");
-		EntityHelper.Core.createEntity(EntityWarden.class, 1002, "warden");
+		EntityHelper.createEntity(EntityDragon.class, 1001, "dragon", () -> new DragonRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "mod_dragon.json", DragonModel.class), 0.5f));
+		EntityHelper.createEntity(EntityWarden.class, 1002, "warden", () -> new WardenRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "warden.json", WardenModel.class), 0.5f));
 		MobInfoRegistry.register(EntityWarden.class, "df.warden.name", "df.warden.desc", 20, 0, null);
-		if (!Global.isServer){
-//			EntityHelper.Client.assignEntityRenderer(EntityHTest.class, new RenderHTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "moa.json", HModelTest.class), 0.5f));
-			EntityHelper.Client.assignEntityRenderer(EntityZombieTest.class, new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5f));
-			EntityHelper.Client.assignEntityRenderer(EntityDragon.class, new DragonRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "mod_dragon.json", DragonModel.class), 0.5f));
-			EntityHelper.Client.assignEntityRenderer(EntityWarden.class, new WardenRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "warden.json", WardenModel.class), 0.5f));
-			EntityHelper.Client.assignTileEntityRenderer(TileEntityFlag.class, new TileEntTest());
-		}
 	}
 }

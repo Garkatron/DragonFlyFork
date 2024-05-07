@@ -3,12 +3,10 @@ package useless.dragonfly;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.render.TextureFX;
-import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import turniplabs.halplibe.util.GameStartEntrypoint;
+import turniplabs.halplibe.util.RecipeEntrypoint;
 import useless.dragonfly.model.block.adapters.CubeDataJsonAdapter;
 import useless.dragonfly.model.block.adapters.FaceDataJsonAdapter;
 import useless.dragonfly.model.block.adapters.ModelDataJsonAdapter;
@@ -25,12 +23,12 @@ import useless.dragonfly.model.blockstates.adapters.VariantDataJsonAdapter;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
+import useless.dragonfly.model.entity.adapters.AnimationDeserializer;
 import useless.dragonfly.model.entity.adapters.BenchEntityBonesJsonAdapter;
 import useless.dragonfly.model.entity.adapters.BenchEntityCubeJsonAdapter;
 import useless.dragonfly.model.entity.adapters.BenchEntityDataJsonAdapter;
 import useless.dragonfly.model.entity.adapters.BenchEntityGeometryJsonAdapter;
 import useless.dragonfly.model.entity.animation.Animation;
-import useless.dragonfly.model.entity.adapters.AnimationDeserializer;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
@@ -40,7 +38,7 @@ import useless.dragonfly.utilities.vector.Vector3fJsonAdapter;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class DragonFly implements GameStartEntrypoint {
+public class DragonFly implements RecipeEntrypoint {
     public static final String MOD_ID = "dragonfly";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Gson GSON = new GsonBuilder()
@@ -60,7 +58,6 @@ public class DragonFly implements GameStartEntrypoint {
 		.registerTypeAdapter(BenchEntityCube.class, new BenchEntityCubeJsonAdapter())
 		.create();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
-	public static double terrainAtlasWidth = TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES;
 	public static String version;
 	public static boolean isDev;
 	public static String renderState = "gui";
@@ -69,22 +66,21 @@ public class DragonFly implements GameStartEntrypoint {
 		isDev = version.equals("${version}") || version.contains("dev");
 	}
 	@Override
-	public void beforeGameStart() {
+	public void onRecipesReady() {
 		if (isDev){
 			LOGGER.info("DragonFly " + version + " loading debug assets");
 			try {
 				Class<?> debug = Class.forName("useless.dragonfly.debug.DebugMain");
 				debug.getMethod("init").invoke(null);
 			} catch (ClassNotFoundException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-				LOGGER.warn("DragonFly " + version + " failed to find debug assets!");
-				e.printStackTrace();
-            }
-        }
+				LOGGER.warn("DragonFly " + version + " failed to find debug assets!", e);
+			}
+		}
 		LOGGER.info("DragonFly initialized.");
 	}
 
 	@Override
-	public void afterGameStart() {
+	public void initNamespaces() {
 
 	}
 }

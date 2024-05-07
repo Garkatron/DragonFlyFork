@@ -42,11 +42,11 @@ public class EntityWarden extends EntityHuman {
 
 	@Override
 	public String getEntityTexture() {
-		return "/assets/dragonfly/entity/warden.png";
+		return "/assets/dragonfly/textures/entity/warden.png";
 	}
 
 	@Override
 	public String getDefaultEntityTexture() {
-		return "/assets/dragonfly/entity/warden.png";
+		return "/assets/dragonfly/textures/entity/warden.png";
 	}
 }

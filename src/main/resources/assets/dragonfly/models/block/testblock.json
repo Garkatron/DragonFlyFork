@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
   "textures": {
-    "missing": "minecraft:block/gravel"
+    "missing": "minecraft:block/gravel",
+    "particle": "minecraft:block/gravel"
   },
 	"elements": [
 		{

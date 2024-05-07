@@ -1,14 +1,11 @@
 package useless.dragonfly.model.block.processed;
 
-import net.minecraft.client.render.TextureFX;
-import net.minecraft.core.Global;
+import net.minecraft.client.render.stitcher.IconCoordinate;
+import net.minecraft.client.render.stitcher.TextureRegistry;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
-import useless.dragonfly.registries.TextureRegistry;
 import useless.dragonfly.utilities.vector.Vector3f;
-
-import static useless.dragonfly.DragonFly.terrainAtlasWidth;
 
 public class BlockFace {
 	protected FaceData faceData;
@@ -52,9 +49,7 @@ public class BlockFace {
 			default:
 				vertexUVMap = null;
 		}
-//		System.out.println(getTexture());
-//		System.out.println(parentCube.parentModel.getTexture(getTexture()));
-		int texture = TextureRegistry.getIndexOrDefault(parentCube.parentModel.getTexture(getTexture()), 0);
+		IconCoordinate texture = TextureRegistry.getTexture(parentCube.parentModel.getTexture(getTexture()).toString());
 		vertices = new Vector3f[]{parentCube.vertices.get(vertexKeyMap[0]), parentCube.vertices.get(vertexKeyMap[1]), parentCube.vertices.get(vertexKeyMap[2]), parentCube.vertices.get(vertexKeyMap[3])};
 		vertexUVs = new double[][]{generateVertexUV(texture, 0), generateVertexUV(texture, 1), generateVertexUV(texture, 2), generateVertexUV(texture, 3)};
 	}
@@ -68,15 +63,15 @@ public class BlockFace {
 			switch (side){ // TODO replace with actual port of vanilla's uv generation
 				case NORTH:
 				case SOUTH:
-					_uvs = new double[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
+					_uvs = new double[]{cube.cubeData.from[0], 16 - cube.cubeData.to[1], cube.cubeData.from[0] + xDif, 16 - cube.cubeData.to[1] + yDif};
 					break;
 				case EAST:
 				case WEST:
-					_uvs = new double[]{cube.cubeData.from[2], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[2] + zDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
+					_uvs = new double[]{cube.cubeData.from[2], 16 - cube.cubeData.to[1], cube.cubeData.from[2] + zDif, 16 - cube.cubeData.to[1] + yDif};
 					break;
 				case TOP:
 				case BOTTOM:
-					_uvs = new double[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[2], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[2] + zDif};
+					_uvs = new double[]{cube.cubeData.from[0], 16 - cube.cubeData.to[2], cube.cubeData.from[0] + xDif, 16 - cube.cubeData.to[2] + zDif};
 					break;
 			}
 
@@ -86,9 +81,9 @@ public class BlockFace {
 
 		for (int i = 0; i < _uvs.length; i++) {
 			if (i == 0 || i == 2){ // u
-				uvScaled[i] = _uvs[i] / TextureFX.tileWidthTerrain;
+				uvScaled[i] = _uvs[i] / 16;
 			} else { // v
-				uvScaled[i] = (TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain;
+				uvScaled[i] = (16 - _uvs[i]) / 16;
 			}
 		}
 	}
@@ -106,13 +101,11 @@ public class BlockFace {
 	public String getTexture(){
 		return faceData.texture;
 	}
-	public double[] generateVertexUV(int texture, int point){
-		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double atlasUMin = (texX + uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = (texX + uMax() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMin = (texY + (1 - vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = (texY + (1 - vMax()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+	public double[] generateVertexUV(IconCoordinate texture, int point){
+		double atlasUMin = texture.getSubIconU(uMin());
+		double atlasUMax = texture.getSubIconU(uMax());
+		double atlasVMin = texture.getSubIconV(vMin());
+		double atlasVMax = texture.getSubIconV(vMax());
 //		if (uMin() < 0.0 || uMax() > 1.0) { // Cap U value
 //			atlasUMin = texX / terrainAtlasWidth;
 //			atlasUMax = (texX + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;

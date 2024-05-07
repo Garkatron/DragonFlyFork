@@ -18,11 +18,11 @@ public class EntityZombieTest extends EntityHuman {
 
 	@Override
 	public String getEntityTexture() {
-		return "/assets/dragonfly/entity/zombie_test.png";
+		return "/assets/dragonfly/textures/entity/zombie_test.png";
 	}
 
 	@Override
 	public String getDefaultEntityTexture() {
-		return "/assets/dragonfly/entity/zombie_test.png";
+		return "/assets/dragonfly/textures/entity/zombie_test.png";
 	}
 }

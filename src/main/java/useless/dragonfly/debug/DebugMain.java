@@ -1,12 +1,18 @@
 package useless.dragonfly.debug;
 
+import net.minecraft.client.render.item.model.ItemModelStandard;
+import net.minecraft.client.render.stitcher.TextureRegistry;
 import turniplabs.halplibe.helper.ItemHelper;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.debug.item.ItemDebugStick;
 
 public class DebugMain {
 	public static void init(){
-		ItemHelper.createItem(DragonFly.MOD_ID, new ItemDebugStick("debug", 21000), "debug").setIconCoord(4, 10);
+		ItemHelper.createItem(DragonFly.MOD_ID, new ItemDebugStick("debug", 21000), (item) -> {
+			ItemModelStandard model = new ItemModelStandard(item, "minecraft");
+			model.icon = TextureRegistry.getTexture("minecraft:item/stick");
+			return model;
+		});
 		DebugEntities.init();
 		DebugBlocks.init();
 //		StringBuilder builder = new StringBuilder();

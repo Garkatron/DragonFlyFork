@@ -1,18 +1,20 @@
 package useless.dragonfly.debug.block;
 
+import net.minecraft.client.render.block.model.BlockModel;
+import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.core.block.BlockTransparent;
 import net.minecraft.core.block.material.Material;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
+import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.model.block.processed.BlockCube;
+import useless.dragonfly.model.block.processed.ModernBlockModel;
 
 import java.util.ArrayList;
 
-public class BlockModel extends BlockTransparent {
-	public useless.dragonfly.model.block.processed.BlockModel model;
-	public BlockModel(String key, int id, Material material, useless.dragonfly.model.block.processed.BlockModel model) {
-		super(key, id, material, true);
-		this.model = model;
+public class BlockDebugModel extends BlockTransparent {
+	public BlockDebugModel(String key, int id, Material material) {
+		super(key, id, material);
 	}
 
 	// Setting this to false also disables the game trying to push you out of the block
@@ -30,7 +32,13 @@ public class BlockModel extends BlockTransparent {
 	}
 	@Override
 	public void getCollidingBoundingBoxes(World world, int x, int y, int z, AABB aabb, ArrayList<AABB> aabbList) {
-		for (BlockCube cube: model.blockCubes) {
+		BlockModel<?> model = BlockModelDispatcher.getInstance().getDispatch(this);
+		if (!(model instanceof BlockModelDragonFly)) {
+			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
+			return;
+		}
+		ModernBlockModel blockModel = ((BlockModelDragonFly)model).baseModel;
+		for (BlockCube cube: blockModel.blockCubes) {
 			setBlockBounds(cube.xMin(), cube.yMin(), cube.zMin(), cube.xMax(), cube.yMax(), cube.zMax());
 			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
 		}

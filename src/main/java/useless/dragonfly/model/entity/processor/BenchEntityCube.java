@@ -2,7 +2,8 @@ package useless.dragonfly.model.entity.processor;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.GLAllocation;
-import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.tessellator.Tessellator;
+import net.minecraft.client.render.tessellator.TessellatorBase;
 import net.minecraft.core.util.helper.Direction;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
@@ -246,7 +247,7 @@ public class BenchEntityCube {
 		if (this.polygons != null) {
 			this.displayList = GLAllocation.generateDisplayLists(1);
 			GL11.glNewList(this.displayList, 4864);
-			Tessellator tessellator = Tessellator.instance;
+			Tessellator tessellator = TessellatorBase.instance;
             for (PolygonDF polygon : this.polygons) {
                 polygon.draw(tessellator, f);
             }

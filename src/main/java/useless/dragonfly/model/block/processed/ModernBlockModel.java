@@ -3,13 +3,12 @@ package useless.dragonfly.model.block.processed;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.data.PositionData;
-import useless.dragonfly.registries.TextureRegistry;
 import useless.dragonfly.utilities.NamespaceId;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 
-public class BlockModel {
+public class ModernBlockModel {
 	private static final HashMap<String, PositionData> defaultDisplays = new HashMap<>();
 	static {
 		PositionData gui = new PositionData(new double[]{30, 225, 0}, new double[] {0, 0, 0}, new double[]{0.625, 0.625, 0.625});
@@ -24,11 +23,11 @@ public class BlockModel {
 	}
 	public BlockCube[] blockCubes = new BlockCube[0];
 	protected ModelData modelData;
-	protected BlockModel parentModel;
+	protected ModernBlockModel parentModel;
 	public HashMap<String, String> textureMap;
 	public HashMap<String, PositionData> display;
 	public final NamespaceId namespaceId;
-	public BlockModel(NamespaceId namespaceId){
+	public ModernBlockModel(NamespaceId namespaceId){
 		this.namespaceId = namespaceId;
 		refreshModel();
 	}
@@ -55,13 +54,6 @@ public class BlockModel {
 		textureMap.putAll(modelData.textures);
 		display.putAll(modelData.display);
 
-
-		// Initialize textures
-		for (String texture: textureMap.values()) {
-			if (texture == null) continue;
-			TextureRegistry.softRegisterTexture(texture);
-		}
-
 		// Use parent elements if model does not specify its own
 		if (parentModel != null && modelData.elements == null){
 			this.blockCubes = new BlockCube[parentModel.blockCubes.length];
@@ -83,7 +75,7 @@ public class BlockModel {
 			result =textureMap.get(textureKey);
 		}
 
-		if (result == null || result.equals(textureKey)) return TextureRegistry.getNamespaceId(0,0);
+		if (result == null || result.equals(textureKey)) return NamespaceId.idFromString("minecraft:block/texture_missing");
 		if (result.contains("#")){
 			return getTexture(result);
 		} else if (!result.contains(":")) {

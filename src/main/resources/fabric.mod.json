@@ -19,7 +19,7 @@
 
   "environment": "*",
   "entrypoints": {
-    "beforeGameStart": [
+    "recipesReady": [
         "useless.dragonfly.DragonFly"
     ]
   },

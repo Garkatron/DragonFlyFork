@@ -11,6 +11,7 @@ fov:0.8035714
 mouseSensitivity:0.5
 screenPadding:0.0
 gamma:0.5
+brightness:0.5
 fxaa:0.0
 controllerSensitivity:0.5
 controllerMenuSensitivity:0.5
@@ -43,6 +44,7 @@ controllerSwapShoulderButtons:false
 controllerSwapAB:false
 controllerSwapXY:false
 clouds:true
+cloudHeight:0.0
 armorDurabilityOverlay:false
 armorProtectionOverlay:true
 heldItemCountOverlay:false
@@ -51,7 +53,7 @@ showDebugScreen:false
 showFrameTimes:false
 showItemDebugInfo:true
 showChunkBorders:false
-showCollisionBoxes:true
+showCollisionBoxes:false
 swapCraftingButtons:false
 disableJInput:false
 enableVbos:false
@@ -104,6 +106,8 @@ fullscreen:false
 borderlessFullscreen:true
 startInFullscreen:true
 tooltipStyle:default
+lightmapStyle:GRAY
+customLightmap:true
 fog:true
 hideUndiscoveredItems:true
 muteOnLostFocus:false

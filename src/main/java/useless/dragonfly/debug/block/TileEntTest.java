@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.PlayerSkinParser;
 import net.minecraft.client.render.model.ModelBase;
 import net.minecraft.client.render.model.ModelPlayerSlim;
+import net.minecraft.client.render.tessellator.Tessellator;
 import net.minecraft.client.render.tileentity.TileEntityRenderer;
 import net.minecraft.core.block.entity.TileEntityFlag;
 import org.lwjgl.opengl.GL11;
@@ -11,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 public class TileEntTest extends TileEntityRenderer<TileEntityFlag> {
 	ModelBase model = new ModelPlayerSlim(0);
 	@Override
-	public void doRender(TileEntityFlag tileEntity, double x, double y, double z, float partialTick) {
+	public void doRender(Tessellator tessellator, TileEntityFlag tileEntity, double x, double y, double z, float partialTick) {
 		GL11.glPushMatrix();
 		GL11.glDisable(2884);
 		GL11.glTranslated(x + 0.5, y, z + 0.5);

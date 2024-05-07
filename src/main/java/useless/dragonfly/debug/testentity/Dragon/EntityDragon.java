@@ -11,11 +11,11 @@ public class EntityDragon extends EntityLiving {
 	public void onLivingUpdate() {}
 	@Override
 	public String getEntityTexture() {
-		return "/assets/dragonfly/entity/dragontex2variant.png";
+		return "/assets/dragonfly/textures/entity/dragontex2variant.png";
 	}
 
 	@Override
 	public String getDefaultEntityTexture() {
-		return "/assets/dragonfly/entity/dragontex2variant.png";
+		return "/assets/dragonfly/textures/entity/dragontex2variant.png";
 	}
 }

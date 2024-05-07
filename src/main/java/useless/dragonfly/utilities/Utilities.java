@@ -63,7 +63,7 @@ public class Utilities {
 		try {
 			Class.forName("net.minecraft.client.Minecraft");
 			try {
-				return Objects.requireNonNull(DragonFlyClient.getMinecraft().texturePackList.selectedTexturePack.getResourceAsStream(path));
+				return Objects.requireNonNull(DragonFlyClient.getMinecraft().texturePackList.getResourceAsStream(path));
 			} catch (Exception ignored){}
 		} catch (Exception ignored) {}
 		try {
