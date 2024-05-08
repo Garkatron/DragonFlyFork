@@ -141,7 +141,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 				.setMetaStateInterpreter(new GrassMetaState())
 				.build(block))
 		.setBlockSound(BlockSounds.GRASS)
-		.setBlockColor(new BlockColorCustom(Colorizers.grass))
+		.setBlockColor((block) -> new BlockColorCustom(Colorizers.grass))
 		.build(new Block("grass" + blockId, blockId++, Material.grass));
 	public static void init() {
 		blockId = 5000;
@@ -155,7 +155,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 								block -> new DFBlockModelBuilder("minecraft")
 									.setBlockModel("block/" + string)
 									.build(block))
-							.setBlockColor(new BlockColorCustom(Colorizers.water))
+							.setBlockColor(block -> new BlockColorCustom(Colorizers.water))
 							.build(new BlockDebugModel(string.replace(".json", ""), blockId++, Material.dirt));
 					} else {
 						new BlockBuilder(MOD_ID)

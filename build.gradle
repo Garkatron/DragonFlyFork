@@ -36,41 +36,9 @@ repositories {
 		metadataSources { artifact() }
 	}
 	ivy {
-		url = "https://github.com/Turnip-Labs"
-		patternLayout {
-			artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
-			m2compatible = true
-		}
-		metadataSources { artifact() }
-	}
-	ivy {
-		url = "https://github.com/Turnip-Labs"
-		patternLayout {
-			artifact "[organisation]/releases/download/[revision]/[module]-[revision].jar"
-			m2compatible = true
-		}
-		metadataSources { artifact() }
-	}
-	ivy {
-		url = "https://github.com/Turnip-Labs"
-		patternLayout {
-			artifact "[organisation]/releases/download/[revision]/[module]-bta-[revision].jar"
-			m2compatible = true
-		}
-		metadataSources { artifact() }
-	}
-	ivy {
 		url = "https://piston-data.mojang.com"
 		patternLayout {
 			artifact "v1/[organisation]/[revision]/[module].jar"
-			m2compatible = true
-		}
-		metadataSources { artifact() }
-	}
-	ivy {
-		url = "https://github.com/UselessBullets"
-		patternLayout {
-			artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
 			m2compatible = true
 		}
 		metadataSources { artifact() }
@@ -94,11 +62,8 @@ dependencies {
 
 	// Helper library
 	// If you do not need Halplibe you can comment this line out or delete this line
-//	modImplementation "com.github.Turnip-Labs:bta-halplibe:${project.halplibe_version}"
-	modImplementation files("lib/halplibe-4.0.2-beta.2.jar")
-
-	modImplementation "ModMenu:ModMenu:${project.mod_menu_version}"
-//	modImplementation files("lib/halplibe-3.1.0-dev.a.jar")
+	modImplementation "com.github.Turnip-Labs:bta-halplibe:${project.halplibe_version}"
+	modImplementation "com.github.Turnip-Labs:ModMenu:${project.mod_menu_version}"
 
 	implementation "org.slf4j:slf4j-api:2.0.9"
 	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.17.0"
