@@ -1,6 +1,7 @@
 package org.useless.dragonfly.model.block;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.LightmapHelper;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelStandard;
 import net.minecraft.client.render.stitcher.IconCoordinate;
@@ -9,6 +10,7 @@ import net.minecraft.client.render.tessellator.Tessellator;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.WorldSource;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.useless.dragonfly.DragonFly;
 import org.useless.dragonfly.helper.ModelHelper;
@@ -58,7 +60,7 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 	}
 
 	@Override
-	public void renderBlockOnInventory(Tessellator tessellator, int metadata, float brightness, float alpha) {
+	public void renderBlockOnInventory(Tessellator tessellator, int metadata, float brightness, float alpha, @Nullable Integer lightmapCoordinate) {
         float xOffset;
 		float yOffset;
 		float zOffset;
@@ -174,6 +176,9 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 			for (BlockCube cube: baseModel.blockCubes) {
 				for (BlockFace face: cube.getFaces().values()) {
 					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
+					if (LightmapHelper.isLightmapEnabled() && lightmapCoordinate != null){
+						tessellator.setLightmapCoord(lightmapCoordinate);
+					}
 					float r = 1;
 					float g = 1;
 					float b = 1;

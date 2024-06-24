@@ -59,7 +59,7 @@ public class BlockRotatable extends Block {
 		}
 	}
 	@Override
-	public boolean blockActivated(World world, int x, int y, int z, EntityPlayer player) {
+	public boolean onBlockRightClicked(World world, int x, int y, int z, EntityPlayer player, Side side, double xHit, double yHit) {
 		if (world.isClientSide) {
 			return true;
 		}

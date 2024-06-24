@@ -11,7 +11,7 @@ public class ItemDebugStick extends Item {
 		super(name,id);
 	}
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
+	public boolean onUseItemOnBlock(ItemStack stack, EntityPlayer player, World world, int blockX, int blockY, int blockZ, Side side, double xPlaced, double yPlaced) {
 		int meta = world.getBlockMetadata(blockX, blockY, blockZ);
 		int id = world.getBlockId(blockX, blockY, blockZ);
 		if (player.isSneaking()){
