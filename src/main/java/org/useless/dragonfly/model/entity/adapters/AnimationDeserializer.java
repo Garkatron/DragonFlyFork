@@ -59,9 +59,9 @@ public class AnimationDeserializer implements JsonDeserializer<Animation> {
 		Map<String, PostData> postMap = Maps.newHashMap();
 		if (element instanceof JsonArray) {
 			List<Float> floats = Lists.newArrayList();
-			floats.add(element.getAsJsonArray().get(0).getAsFloat());
-			floats.add(element.getAsJsonArray().get(1).getAsFloat());
-			floats.add(element.getAsJsonArray().get(2).getAsFloat());
+			floats.add((float) Math.toRadians(element.getAsJsonArray().get(0).getAsFloat()));
+			floats.add((float) Math.toRadians(element.getAsJsonArray().get(1).getAsFloat()));
+			floats.add((float) Math.toRadians(element.getAsJsonArray().get(2).getAsFloat()));
 			postMap.put("0", new PostData(floats, "catmullrom"));
 			return postMap;
 		}
@@ -86,17 +86,17 @@ public class AnimationDeserializer implements JsonDeserializer<Animation> {
 		}
 
 		if (element instanceof JsonArray) {
-			list.add(0, ((JsonArray) element).get(0).getAsFloat());
-			list.add(1, ((JsonArray) element).get(1).getAsFloat());
-			list.add(2, ((JsonArray) element).get(2).getAsFloat());
+			list.add(0, (float) Math.toRadians(((JsonArray) element).get(0).getAsFloat()));
+			list.add(1, (float) Math.toRadians(((JsonArray) element).get(1).getAsFloat()));
+			list.add(2, (float) Math.toRadians(((JsonArray) element).get(2).getAsFloat()));
 			return new PostData(list, "catmullrom");
 		}
 
 		if (element instanceof JsonObject) {
 			JsonObject jsonObject = (JsonObject) element;
-			list.add(0, jsonObject.getAsJsonArray("post").get(0).getAsFloat());
-			list.add(1, jsonObject.getAsJsonArray("post").get(1).getAsFloat());
-			list.add(2, jsonObject.getAsJsonArray("post").get(2).getAsFloat());
+			list.add(0, (float) Math.toRadians(jsonObject.getAsJsonArray("post").get(0).getAsFloat()));
+			list.add(1, (float) Math.toRadians(jsonObject.getAsJsonArray("post").get(1).getAsFloat()));
+			list.add(2, (float) Math.toRadians(jsonObject.getAsJsonArray("post").get(2).getAsFloat()));
 			return new PostData(list, jsonObject.getAsJsonPrimitive("lerp_mode").getAsString());
 		}
 		return null;
