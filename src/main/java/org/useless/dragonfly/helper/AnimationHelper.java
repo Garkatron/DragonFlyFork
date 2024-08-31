@@ -21,6 +21,8 @@ import java.util.function.IntPredicate;
 public class AnimationHelper {
 	public static final Map<String, Animation> registeredAnimations = new HashMap<>();
 
+	private static final double DEGREES_TO_RADIANS = 0.017453292519943295;
+
 	public static Animation getOrCreateEntityAnimation(String modID, String animationSource) {
 		String animationKey = getAnimationLocation(modID, animationSource);
 		if (registeredAnimations.containsKey(animationKey)){
@@ -114,18 +116,18 @@ public class AnimationHelper {
 					Vector3f vector3f3 = degreeVec(rotationFrame.get(Math.min(rotationFrame.size() - 1, j + 1)).vector3f());
 
 					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale / (float) (Math.PI),
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale / (float) (Math.PI),
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale / (float) (Math.PI)
+						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale,
+						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale,
+						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale
 					);
 					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
 				} else {
 					Vector3f vector3f = degreeVec(rotationFrame.get(i).vector3f());
 					Vector3f vector3f1 = degreeVec(rotationFrame.get(j).vector3f());
 					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale / (float) (Math.PI),
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale / (float) (Math.PI),
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale / (float) (Math.PI)
+						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale,
+						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale,
+						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale
 					);
 					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
 
@@ -214,7 +216,7 @@ public class AnimationHelper {
 	}
 
 	public static Vector3f degreeVec(float degX, float degY, float degZ) {
-		return new Vector3f(degX * (float) (Math.PI / 180.0), degY * (float) (Math.PI / 180.0), degZ * (float) (Math.PI / 180.0));
+		return new Vector3f(degX * (MathHelper.PI), degY * (MathHelper.PI), degZ * (MathHelper.PI));
 	}
 
 	public static Vector3f posVec(Vector3f vector3f) {
@@ -222,7 +224,7 @@ public class AnimationHelper {
 	}
 
 	public static Vector3f degreeVec(Vector3f vector3f) {
-		return new Vector3f(vector3f.x * (float) (Math.PI / 180.0), vector3f.y * (float) (Math.PI / 180.0), vector3f.z * (float) (Math.PI / 180.0));
+		return new Vector3f(vector3f.x / (MathHelper.PI), vector3f.y / (MathHelper.PI), vector3f.z / (MathHelper.PI));
 	}
 
 	private static float getElapsedSeconds(AnimationData animationData, long ms) {
