@@ -22,7 +22,7 @@ DragonFly Allows the use of
 - Add version variable to "gradle.properties" `dragonfly_version=1.5.0-7.2-pre2`
 - Add mod repository to "build.gradle"
 ```
-ivy {
+repositories {
 	mavenCentral()
 	maven { url = "https://jitpack.io" }
 }
