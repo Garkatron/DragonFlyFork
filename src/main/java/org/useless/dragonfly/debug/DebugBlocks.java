@@ -41,6 +41,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 				.setBlockModel("block/testblock2.json")
 				.build(block))
 		.build(new BlockDebugModel("testblock" + blockId, blockId++, Material.dirt));
+	
 	public static final Block testBlock3 = new BlockBuilder(MOD_ID)
 		.setBlockModel(
 			block -> new DFBlockModelBuilder(MOD_ID)
@@ -143,6 +144,9 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockSound(BlockSounds.GRASS)
 		.setBlockColor((block) -> new BlockColorCustom(Colorizers.grass))
 		.build(new Block("grass" + blockId, blockId++, Material.grass));
+
+
+
 	public static void init() {
 		blockId = 5000;
 		try {

@@ -77,6 +77,7 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 
 		switch (DragonFly.renderState) {
 			case "ground":
+				// Inicializar escala, offset y rotación con valores de displayData
 				xScale = (float) displayData.scale[2] * 4;
 				yScale = (float) displayData.scale[1] * 4;
 				zScale = (float) displayData.scale[0] * 4;
@@ -92,9 +93,27 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1];
 				zRot = (float) displayData.rotation[2];
+
+				// Sumar valores de customDisplayData si están presentes
+				if (customDisplayData!=null && customDisplayData.getGround() != null) {
+					PositionData groundData = customDisplayData.getGround();
+					xScale += (float) groundData.scale[2] * 4;
+					yScale += (float) groundData.scale[1] * 4;
+					zScale += (float) groundData.scale[0] * 4;
+
+					xOffset += (float) groundData.translation[2] / 16f;
+					yOffset += (float) groundData.translation[1] / 16f;
+					zOffset += (float) groundData.translation[0] / 16f;
+
+					xRot += (float) groundData.rotation[0];
+					yRot += (float) groundData.rotation[1];
+					zRot += (float) groundData.rotation[2];
+				}
 				break;
+
 			case "head":
 				GL11.glFrontFace(GL11.GL_CW);
+				// Inicializar escala, offset y rotación con valores de displayData
 				xScale = (float) displayData.scale[0];
 				yScale = (float) displayData.scale[1];
 				zScale = (float) displayData.scale[2];
@@ -110,8 +129,26 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1] + 180;
 				zRot = (float) displayData.rotation[2];
+
+				// Sumar valores de customDisplayData si están presentes
+				if (customDisplayData!=null && customDisplayData.getHead() != null) {
+					PositionData headData = customDisplayData.getHead();
+					xScale += (float) headData.scale[0];
+					yScale += (float) headData.scale[1];
+					zScale += (float) headData.scale[2];
+
+					xOffset += (float) headData.translation[0] / 16f;
+					yOffset += (float) headData.translation[1] / 16f;
+					zOffset += (float) headData.translation[2] / 16f;
+
+					xRot += (float) headData.rotation[0];
+					yRot += (float) headData.rotation[1] + 180;
+					zRot += (float) headData.rotation[2];
+				}
 				break;
+
 			case "firstperson_righthand":
+				// Inicializar escala, offset y rotación con valores de displayData
 				xScale = (float) displayData.scale[2] * 2.5f;
 				yScale = (float) displayData.scale[1] * 2.5f;
 				zScale = (float) displayData.scale[0] * 2.5f;
@@ -127,34 +164,53 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1] + 45;
 				zRot = (float) displayData.rotation[2];
+
+				// Sumar valores de customDisplayData si están presentes
+				if (customDisplayData!=null && customDisplayData.getFirstPersonRightHand() != null) {
+					PositionData firstPersonData = customDisplayData.getFirstPersonRightHand();
+					xScale += (float) firstPersonData.scale[2] * 2.5f;
+					yScale += (float) firstPersonData.scale[1] * 2.5f;
+					zScale += (float) firstPersonData.scale[0] * 2.5f;
+
+					xOffset += (float) firstPersonData.translation[2] / 8f;
+					yOffset += (float) firstPersonData.translation[1] / 8f;
+					zOffset += (float) firstPersonData.translation[0] / 8f;
+
+					xRot += (float) firstPersonData.rotation[0];
+					yRot += (float) firstPersonData.rotation[1] + 45;
+					zRot += (float) firstPersonData.rotation[2];
+				}
 				break;
+
 			case "thirdperson_righthand":
+				GL11.glFrontFace(GL11.GL_CW);
+				// Inicializar rotación, escala y traslación con valores de displayData
+				double[] rotation = displayData.rotation;;
+				double[] scale = displayData.scale;
+				double[] translation = displayData.translation;
 
-				// Inicializar rotación, escala y traslación
-				double[] rotation;
-				double[] scale;
-				double[] translation;
+				// Sumar valores de customDisplayData si están presentes
+				if (customDisplayData!=null && customDisplayData.getThirdPersonRightHand() != null) {
+					PositionData thirdPersonData = customDisplayData.getThirdPersonRightHand();
+					rotation[0] += thirdPersonData.rotation[0];
+					rotation[1] += thirdPersonData.rotation[1];
+					rotation[2] += thirdPersonData.rotation[2];
 
-				// Verificar que customDisplayData no sea nulo
-				if (customDisplayData != null) {
-					rotation = customDisplayData.getThirdPersonRightHand().rotation;
-					scale = customDisplayData.getThirdPersonRightHand().scale;
-					translation = customDisplayData.getThirdPersonRightHand().translation;
-				} else {
-					// Usar valores de displayData en caso de que customDisplayData sea nulo
-					rotation = displayData.rotation;
-					scale = displayData.scale;
-					translation = displayData.translation;
+					scale[0] += thirdPersonData.scale[0];
+					scale[1] += thirdPersonData.scale[1];
+					scale[2] += thirdPersonData.scale[2];
+
+					translation[0] += thirdPersonData.translation[0];
+					translation[1] += thirdPersonData.translation[1];
+					translation[2] += thirdPersonData.translation[2];
 				}
 
-				// Común para ambos casos
-				GL11.glFrontFace(GL11.GL_CW);
 				float scaleFactor = 8f / 3;
 
 				// Usar escala
-				xScale = (float)scale[2] * scaleFactor; // Escala en el eje X
-				yScale = (float)scale[1] * scaleFactor; // Escala en el eje Y
-				zScale = (float)scale[0] * scaleFactor; // Escala en el eje Z
+				xScale = (float) scale[2] * scaleFactor; // Escala en el eje X
+				yScale = (float) scale[1] * scaleFactor; // Escala en el eje Y
+				zScale = (float) scale[0] * scaleFactor; // Escala en el eje Z
 
 				// Ajustes de Offset
 				xOffset = 0.5f * xScale; // Offset inicial en X
@@ -162,19 +218,20 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				zOffset = 0.5f * zScale; // Offset inicial en Z
 
 				// Sumar traducción
-				xOffset += (float)translation[2] / 16f; // Sumar traducción en X
-				yOffset += (float)translation[1] / 16f; // Sumar traducción en Y
-				zOffset += (float)translation[0] / 16f; // Sumar traducción en Z
+				xOffset += (float) translation[2] / 16f; // Sumar traducción en X
+				yOffset += (float) translation[1] / 16f; // Sumar traducción en Y
+				zOffset += (float) translation[0] / 16f; // Sumar traducción en Z
 
 				// Rotaciones
-				xRot = (float)-rotation[2] + 180; // Mantener esto igual si necesitas invertir
-				yRot = (float)rotation[1] + 45; // Sumar 45 grados
-				zRot = (float)-rotation[0] - 100; // Mantener esto igual si necesitas invertir
+				xRot = (float) -rotation[2] + 180; // Mantener esto igual si necesitas invertir
+				yRot = (float) rotation[1] + 45; // Sumar 45 grados
+				zRot = (float) -rotation[0] - 100; // Mantener esto igual si necesitas invertir
 
 				break;
 
 			case "gui":
 			default:
+				// Inicializar escala, offset y rotación con valores de displayData
 				xScale = (float) displayData.scale[2] * 1.6f;
 				yScale = (float) displayData.scale[1] * 1.6f;
 				zScale = (float) displayData.scale[0] * 1.6f;
@@ -187,10 +244,28 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				yOffset -= (float) displayData.translation[1] / 16f;
 				zOffset -= (float) displayData.translation[0] / 16f;
 
-				xRot = (float) displayData.rotation[0] - 30;
-				yRot = (float) displayData.rotation[1] + 45;
+				xRot = (float) displayData.rotation[0];
+				yRot = (float) displayData.rotation[1];
 				zRot = (float) displayData.rotation[2];
+
+				// Sumar valores de customDisplayData si están presentes
+				if (customDisplayData!=null && customDisplayData.getGui() != null) {
+					PositionData guiData = customDisplayData.getGui();
+					xScale += (float) guiData.scale[2] * 1.6f;
+					yScale += (float) guiData.scale[1] * 1.6f;
+					zScale += (float) guiData.scale[0] * 1.6f;
+
+					xOffset += (float) guiData.translation[2] / 16f;
+					yOffset += (float) guiData.translation[1] / 16f;
+					zOffset += (float) guiData.translation[0] / 16f;
+
+					xRot += (float) guiData.rotation[0];
+					yRot += (float) guiData.rotation[1];
+					zRot += (float) guiData.rotation[2];
+				}
+				break;
 		}
+
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

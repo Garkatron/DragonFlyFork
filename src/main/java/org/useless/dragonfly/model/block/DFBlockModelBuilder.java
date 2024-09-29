@@ -1,6 +1,7 @@
 package org.useless.dragonfly.model.block;
 
 import net.minecraft.core.block.Block;
+import org.lwjgl.Sys;
 import org.useless.dragonfly.helper.ModelHelper;
 import org.useless.dragonfly.model.block.processed.ModernBlockModel;
 import org.useless.dragonfly.model.blockstates.data.BlockstateData;
