@@ -56,6 +56,7 @@ public class ModernBlockModel {
 		}
 		textureMap.putAll(modelData.textures);
 		display.putAll(modelData.display);
+
 		displayData = modelData.displayData;
 
 		// Use parent elements if model does not specify its own

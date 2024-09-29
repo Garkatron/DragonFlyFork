@@ -1,8 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-  "textures": {
-    "missing": "minecraft:block/planks_oak"
-  },
 	"elements": [
 		{
 			"from": [2, 0, 2],
@@ -82,5 +79,26 @@
 				"down": {"uv": [0, 0, 12, 2], "texture": "#missing"}
 			}
 		}
-	]
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-180, 0, 0]
+		},
+		"firstperson_righthand": {
+			"translation": [-392, 0, 0],
+			"scale": [200, 200, 200]
+		},
+		"ground": {
+			"scale": [4, 4, 4]
+		},
+		"gui": {
+			"rotation": [101, 0, 0]
+		},
+		"head": {
+			"rotation": [42, 0, 0]
+		},
+		"fixed": {
+			"rotation": [98, 0, 0]
+		}
+	}
 }

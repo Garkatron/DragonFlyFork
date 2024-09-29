@@ -77,194 +77,113 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 
 		switch (DragonFly.renderState) {
 			case "ground":
-				// Inicializar escala, offset y rotación con valores de displayData
-				xScale = (float) displayData.scale[2] * 4;
-				yScale = (float) displayData.scale[1] * 4;
-				zScale = (float) displayData.scale[0] * 4;
+				PositionData positionData = customDisplayData.getGround();
+
+				// Comprobar si los valores son nulos, en cuyo caso usar los valores de displayData
+				xScale = (positionData != null && positionData.scale != null) ? (float) positionData.scale[2] * 4 : (float) displayData.scale[2] * 4;
+				yScale = (positionData != null && positionData.scale != null) ? (float) positionData.scale[1] * 4 : (float) displayData.scale[1] * 4;
+				zScale = (positionData != null && positionData.scale != null) ? (float) positionData.scale[0] * 4 : (float) displayData.scale[0] * 4;
 
 				xOffset = 0.5f * xScale;
 				yOffset = 0.5f * yScale;
 				zOffset = 0.5f * zScale;
 
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
+				xOffset -= (positionData != null && positionData.translation != null) ? (float) positionData.translation[2] / 16f : (float) displayData.translation[2] / 16f;
+				yOffset -= (positionData != null && positionData.translation != null) ? (float) positionData.translation[1] / 16f : (float) displayData.translation[1] / 16f;
+				zOffset -= (positionData != null && positionData.translation != null) ? (float) positionData.translation[0] / 16f : (float) displayData.translation[0] / 16f;
 
-				xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1];
-				zRot = (float) displayData.rotation[2];
-
-				// Sumar valores de customDisplayData si están presentes
-				if (customDisplayData!=null && customDisplayData.getGround() != null) {
-					PositionData groundData = customDisplayData.getGround();
-					xScale += (float) groundData.scale[2] * 4;
-					yScale += (float) groundData.scale[1] * 4;
-					zScale += (float) groundData.scale[0] * 4;
-
-					xOffset += (float) groundData.translation[2] / 16f;
-					yOffset += (float) groundData.translation[1] / 16f;
-					zOffset += (float) groundData.translation[0] / 16f;
-
-					xRot += (float) groundData.rotation[0];
-					yRot += (float) groundData.rotation[1];
-					zRot += (float) groundData.rotation[2];
-				}
+				xRot = (positionData != null && positionData.rotation != null) ? (float) positionData.rotation[0] : (float) displayData.rotation[0];
+				yRot = (positionData != null && positionData.rotation != null) ? (float) positionData.rotation[1] : (float) displayData.rotation[1];
+				zRot = (positionData != null && positionData.rotation != null) ? (float) positionData.rotation[2] : (float) displayData.rotation[2];
 				break;
 
 			case "head":
-				GL11.glFrontFace(GL11.GL_CW);
-				// Inicializar escala, offset y rotación con valores de displayData
-				xScale = (float) displayData.scale[0];
-				yScale = (float) displayData.scale[1];
-				zScale = (float) displayData.scale[2];
+				PositionData headPositionData = customDisplayData.getHead();
+
+				xScale = (headPositionData != null && headPositionData.scale != null) ? (float) headPositionData.scale[0] : (float) displayData.scale[0];
+				yScale = (headPositionData != null && headPositionData.scale != null) ? (float) headPositionData.scale[1] : (float) displayData.scale[1];
+				zScale = (headPositionData != null && headPositionData.scale != null) ? (float) headPositionData.scale[2] : (float) displayData.scale[2];
 
 				xOffset = 0.5f * xScale;
 				yOffset = 0.5f * yScale;
 				zOffset = 0.5f * zScale;
 
-				xOffset -= (float) displayData.translation[0] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[2] / 16f;
+				xOffset -= (headPositionData != null && headPositionData.translation != null) ? (float) headPositionData.translation[0] / 16f : (float) displayData.translation[0] / 16f;
+				yOffset -= (headPositionData != null && headPositionData.translation != null) ? (float) headPositionData.translation[1] / 16f : (float) displayData.translation[1] / 16f;
+				zOffset -= (headPositionData != null && headPositionData.translation != null) ? (float) headPositionData.translation[2] / 16f : (float) displayData.translation[2] / 16f;
 
-				xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1] + 180;
-				zRot = (float) displayData.rotation[2];
-
-				// Sumar valores de customDisplayData si están presentes
-				if (customDisplayData!=null && customDisplayData.getHead() != null) {
-					PositionData headData = customDisplayData.getHead();
-					xScale += (float) headData.scale[0];
-					yScale += (float) headData.scale[1];
-					zScale += (float) headData.scale[2];
-
-					xOffset += (float) headData.translation[0] / 16f;
-					yOffset += (float) headData.translation[1] / 16f;
-					zOffset += (float) headData.translation[2] / 16f;
-
-					xRot += (float) headData.rotation[0];
-					yRot += (float) headData.rotation[1] + 180;
-					zRot += (float) headData.rotation[2];
-				}
+				xRot = (headPositionData != null && headPositionData.rotation != null) ? (float) headPositionData.rotation[0] : (float) displayData.rotation[0];
+				yRot = (headPositionData != null && headPositionData.rotation != null) ? (float) headPositionData.rotation[1] : (float) displayData.rotation[1];
+				zRot = (headPositionData != null && headPositionData.rotation != null) ? (float) headPositionData.rotation[2] : (float) displayData.rotation[2];
 				break;
 
+			// Los demás casos siguen el mismo patrón:
 			case "firstperson_righthand":
-				// Inicializar escala, offset y rotación con valores de displayData
-				xScale = (float) displayData.scale[2] * 2.5f;
-				yScale = (float) displayData.scale[1] * 2.5f;
-				zScale = (float) displayData.scale[0] * 2.5f;
+				PositionData firstPersonRightHandPositionData = customDisplayData.getFirstPersonRightHand();
+
+				xScale = (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.scale != null) ? (float) firstPersonRightHandPositionData.scale[2] * 2.5f : (float) displayData.scale[2] * 2.5f;
+				yScale = (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.scale != null) ? (float) firstPersonRightHandPositionData.scale[1] * 2.5f : (float) displayData.scale[1] * 2.5f;
+				zScale = (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.scale != null) ? (float) firstPersonRightHandPositionData.scale[0] * 2.5f : (float) displayData.scale[0] * 2.5f;
 
 				xOffset = 0.5f * xScale;
 				yOffset = 0.5f * yScale;
 				zOffset = 0.5f * zScale;
 
-				xOffset -= (float) displayData.translation[2] / 8f;
-				yOffset -= (float) displayData.translation[1] / 8f;
-				zOffset -= (float) displayData.translation[0] / 8f;
+				xOffset -= (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.translation != null) ? (float) firstPersonRightHandPositionData.translation[2] / 8f : (float) displayData.translation[2] / 8f;
+				yOffset -= (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.translation != null) ? (float) firstPersonRightHandPositionData.translation[1] / 8f : (float) displayData.translation[1] / 8f;
+				zOffset -= (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.translation != null) ? (float) firstPersonRightHandPositionData.translation[0] / 8f : (float) displayData.translation[0] / 8f;
 
-				xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1] + 45;
-				zRot = (float) displayData.rotation[2];
-
-				// Sumar valores de customDisplayData si están presentes
-				if (customDisplayData!=null && customDisplayData.getFirstPersonRightHand() != null) {
-					PositionData firstPersonData = customDisplayData.getFirstPersonRightHand();
-					xScale += (float) firstPersonData.scale[2] * 2.5f;
-					yScale += (float) firstPersonData.scale[1] * 2.5f;
-					zScale += (float) firstPersonData.scale[0] * 2.5f;
-
-					xOffset += (float) firstPersonData.translation[2] / 8f;
-					yOffset += (float) firstPersonData.translation[1] / 8f;
-					zOffset += (float) firstPersonData.translation[0] / 8f;
-
-					xRot += (float) firstPersonData.rotation[0];
-					yRot += (float) firstPersonData.rotation[1] + 45;
-					zRot += (float) firstPersonData.rotation[2];
-				}
+				xRot = (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.rotation != null) ? (float) firstPersonRightHandPositionData.rotation[0] : (float) displayData.rotation[0];
+				yRot = (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.rotation != null) ? (float) firstPersonRightHandPositionData.rotation[1] + 45 : (float) displayData.rotation[1] + 45;
+				zRot = (firstPersonRightHandPositionData != null && firstPersonRightHandPositionData.rotation != null) ? (float) firstPersonRightHandPositionData.rotation[2] : (float) displayData.rotation[2];
 				break;
 
 			case "thirdperson_righthand":
-				GL11.glFrontFace(GL11.GL_CW);
-				// Inicializar rotación, escala y traslación con valores de displayData
-				double[] rotation = displayData.rotation;;
-				double[] scale = displayData.scale;
-				double[] translation = displayData.translation;
+				PositionData thirdPersonRightHandPositionData = customDisplayData.getThirdPersonRightHand();
 
-				// Sumar valores de customDisplayData si están presentes
-				if (customDisplayData!=null && customDisplayData.getThirdPersonRightHand() != null) {
-					PositionData thirdPersonData = customDisplayData.getThirdPersonRightHand();
-					rotation[0] += thirdPersonData.rotation[0];
-					rotation[1] += thirdPersonData.rotation[1];
-					rotation[2] += thirdPersonData.rotation[2];
-
-					scale[0] += thirdPersonData.scale[0];
-					scale[1] += thirdPersonData.scale[1];
-					scale[2] += thirdPersonData.scale[2];
-
-					translation[0] += thirdPersonData.translation[0];
-					translation[1] += thirdPersonData.translation[1];
-					translation[2] += thirdPersonData.translation[2];
-				}
-
-				float scaleFactor = 8f / 3;
-
-				// Usar escala
-				xScale = (float) scale[2] * scaleFactor; // Escala en el eje X
-				yScale = (float) scale[1] * scaleFactor; // Escala en el eje Y
-				zScale = (float) scale[0] * scaleFactor; // Escala en el eje Z
-
-				// Ajustes de Offset
-				xOffset = 0.5f * xScale; // Offset inicial en X
-				yOffset = 0.5f * yScale; // Offset inicial en Y
-				zOffset = 0.5f * zScale; // Offset inicial en Z
-
-				// Sumar traducción
-				xOffset += (float) translation[2] / 16f; // Sumar traducción en X
-				yOffset += (float) translation[1] / 16f; // Sumar traducción en Y
-				zOffset += (float) translation[0] / 16f; // Sumar traducción en Z
-
-				// Rotaciones
-				xRot = (float) -rotation[2] + 180; // Mantener esto igual si necesitas invertir
-				yRot = (float) rotation[1] + 45; // Sumar 45 grados
-				zRot = (float) -rotation[0] - 100; // Mantener esto igual si necesitas invertir
-
-				break;
-
-			case "gui":
-			default:
-				// Inicializar escala, offset y rotación con valores de displayData
-				xScale = (float) displayData.scale[2] * 1.6f;
-				yScale = (float) displayData.scale[1] * 1.6f;
-				zScale = (float) displayData.scale[0] * 1.6f;
+				float scale = 8f / 3;
+				xScale = (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.scale != null) ? (float) thirdPersonRightHandPositionData.scale[2] * scale : (float) displayData.scale[2] * scale;
+				yScale = (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.scale != null) ? (float) thirdPersonRightHandPositionData.scale[1] * scale : (float) displayData.scale[1] * scale;
+				zScale = (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.scale != null) ? (float) thirdPersonRightHandPositionData.scale[0] * scale : (float) displayData.scale[0] * scale;
 
 				xOffset = 0.5f * xScale;
 				yOffset = 0.5f * yScale;
 				zOffset = 0.5f * zScale;
 
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
+				xOffset -= (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.translation != null) ? (float) thirdPersonRightHandPositionData.translation[2] / 16f : (float) displayData.translation[2] / 16f;
+				yOffset -= (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.translation != null) ? (float) thirdPersonRightHandPositionData.translation[1] / 16f : (float) displayData.translation[1] / 16f;
+				zOffset -= (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.translation != null) ? (float) thirdPersonRightHandPositionData.translation[0] / 16f : (float) displayData.translation[0] / 16f;
 
-				xRot = (float) displayData.rotation[0];
-				yRot = (float) displayData.rotation[1];
-				zRot = (float) displayData.rotation[2];
-
-				// Sumar valores de customDisplayData si están presentes
-				if (customDisplayData!=null && customDisplayData.getGui() != null) {
-					PositionData guiData = customDisplayData.getGui();
-					xScale += (float) guiData.scale[2] * 1.6f;
-					yScale += (float) guiData.scale[1] * 1.6f;
-					zScale += (float) guiData.scale[0] * 1.6f;
-
-					xOffset += (float) guiData.translation[2] / 16f;
-					yOffset += (float) guiData.translation[1] / 16f;
-					zOffset += (float) guiData.translation[0] / 16f;
-
-					xRot += (float) guiData.rotation[0];
-					yRot += (float) guiData.rotation[1];
-					zRot += (float) guiData.rotation[2];
-				}
+				xRot = (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.rotation != null) ? (float) (-thirdPersonRightHandPositionData.rotation[2] + 180) : (float) (-displayData.rotation[2] + 180);
+				yRot = (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.rotation != null) ? (float) thirdPersonRightHandPositionData.rotation[1] + 45 : (float) displayData.rotation[1] + 45;
+				zRot = (thirdPersonRightHandPositionData != null && thirdPersonRightHandPositionData.rotation != null) ? (float) (-thirdPersonRightHandPositionData.rotation[0] - 100) : (float) (-displayData.rotation[0] - 100);
 				break;
+
+			case "gui":
+				PositionData guiPositionData = customDisplayData.getGui();
+
+				xScale = (guiPositionData != null && guiPositionData.scale != null) ? (float) guiPositionData.scale[2] * 1.6f : (float) displayData.scale[2] * 1.6f;
+				yScale = (guiPositionData != null && guiPositionData.scale != null) ? (float) guiPositionData.scale[1] * 1.6f : (float) displayData.scale[1] * 1.6f;
+				zScale = (guiPositionData != null && guiPositionData.scale != null) ? (float) guiPositionData.scale[0] * 1.6f : (float) displayData.scale[0] * 1.6f;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+				xOffset -= (guiPositionData != null && guiPositionData.translation != null) ? (float) guiPositionData.translation[2] / 16f : (float) displayData.translation[2] / 16f;
+				yOffset -= (guiPositionData != null && guiPositionData.translation != null) ? (float) guiPositionData.translation[1] / 16f : (float) displayData.translation[1] / 16f;
+				zOffset -= (guiPositionData != null && guiPositionData.translation != null) ? (float) guiPositionData.translation[0] / 16f : (float) displayData.translation[0] / 16f;
+
+				xRot = (guiPositionData != null && guiPositionData.rotation != null) ? (float) guiPositionData.rotation[0] - 30 : (float) displayData.rotation[0] - 30;
+				yRot = (guiPositionData != null && guiPositionData.rotation != null) ? (float) guiPositionData.rotation[1] + 45 : (float) displayData.rotation[1] + 45;
+				zRot = (guiPositionData != null && guiPositionData.rotation != null) ? (float) guiPositionData.rotation[2] : (float) displayData.rotation[2];
+				break;
+			default:
+
+
 		}
+
+
 
 
 		GL11.glEnable(GL11.GL_CULL_FACE);

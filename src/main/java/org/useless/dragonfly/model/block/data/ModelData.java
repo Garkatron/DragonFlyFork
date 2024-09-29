@@ -15,7 +15,7 @@ public class ModelData {
 	public DisplayData displayData;
 
 	public ModelData(){
-		this(null, true, new HashMap<>(), null, new HashMap<>(), null);
+		this(null, true, new HashMap<>(), new DisplayData(), new HashMap<>(), null);
 	}
 	public ModelData(String parent, boolean ao, Map<String, PositionData> display, DisplayData displayData , Map<String, String> texture, CubeData[] elements){
 		this.parent = parent;
