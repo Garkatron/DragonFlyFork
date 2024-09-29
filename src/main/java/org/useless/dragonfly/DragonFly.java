@@ -7,16 +7,8 @@ import net.minecraft.client.render.stitcher.TextureRegistry;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.useless.dragonfly.model.block.adapters.CubeDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.FaceDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.ModelDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.PositionDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.RotationDataJsonAdapter;
-import org.useless.dragonfly.model.block.data.CubeData;
-import org.useless.dragonfly.model.block.data.FaceData;
-import org.useless.dragonfly.model.block.data.ModelData;
-import org.useless.dragonfly.model.block.data.PositionData;
-import org.useless.dragonfly.model.block.data.RotationData;
+import org.useless.dragonfly.model.block.adapters.*;
+import org.useless.dragonfly.model.block.data.*;
 import org.useless.dragonfly.model.blockstates.adapters.BlockStateJsonAdapter;
 import org.useless.dragonfly.model.blockstates.adapters.ModelPartJsonAdapter;
 import org.useless.dragonfly.model.blockstates.adapters.VariantDataJsonAdapter;
@@ -60,6 +52,7 @@ public class DragonFly implements GameStartEntrypoint {
 		.registerTypeAdapter(BenchEntityGeometry.class, new BenchEntityGeometryJsonAdapter())
 		.registerTypeAdapter(BenchEntityBones.class, new BenchEntityBonesJsonAdapter())
 		.registerTypeAdapter(BenchEntityCube.class, new BenchEntityCubeJsonAdapter())
+		.registerTypeAdapter(DisplayData.class, new DisplayDataJsonAdapter())
 		.create();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
 	public static String version;

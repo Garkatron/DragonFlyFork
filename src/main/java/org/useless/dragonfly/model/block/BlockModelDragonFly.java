@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 import org.useless.dragonfly.DragonFly;
 import org.useless.dragonfly.helper.ModelHelper;
 import org.useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
+import org.useless.dragonfly.model.block.data.DisplayData;
 import org.useless.dragonfly.model.block.data.PositionData;
 import org.useless.dragonfly.model.block.processed.BlockCube;
 import org.useless.dragonfly.model.block.processed.BlockFace;
@@ -70,7 +71,10 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 		float xRot;
 		float yRot;
 		float zRot;
+
 		PositionData displayData = baseModel.getDisplayPosition(DragonFly.renderState);
+		DisplayData customDisplayData = baseModel.displayData;
+
 		switch (DragonFly.renderState) {
 			case "ground":
 				xScale = (float) displayData.scale[2] * 4;
@@ -125,24 +129,50 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				zRot = (float) displayData.rotation[2];
 				break;
 			case "thirdperson_righthand":
+
+				// Inicializar rotación, escala y traslación
+				double[] rotation;
+				double[] scale;
+				double[] translation;
+
+				// Verificar que customDisplayData no sea nulo
+				if (customDisplayData != null) {
+					rotation = customDisplayData.getThirdPersonRightHand().rotation;
+					scale = customDisplayData.getThirdPersonRightHand().scale;
+					translation = customDisplayData.getThirdPersonRightHand().translation;
+				} else {
+					// Usar valores de displayData en caso de que customDisplayData sea nulo
+					rotation = displayData.rotation;
+					scale = displayData.scale;
+					translation = displayData.translation;
+				}
+
+				// Común para ambos casos
 				GL11.glFrontFace(GL11.GL_CW);
-				float scale = 8f/3;
-				xScale = (float) displayData.scale[2] * scale;
-				yScale = (float) displayData.scale[1] * scale;
-				zScale = (float) displayData.scale[0] * scale;
+				float scaleFactor = 8f / 3;
 
-				xOffset = 0.5f * xScale;
-				yOffset = 0.5f * yScale;
-				zOffset = 0.5f * zScale;
+				// Usar escala
+				xScale = (float)scale[2] * scaleFactor; // Escala en el eje X
+				yScale = (float)scale[1] * scaleFactor; // Escala en el eje Y
+				zScale = (float)scale[0] * scaleFactor; // Escala en el eje Z
 
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
+				// Ajustes de Offset
+				xOffset = 0.5f * xScale; // Offset inicial en X
+				yOffset = 0.5f * yScale; // Offset inicial en Y
+				zOffset = 0.5f * zScale; // Offset inicial en Z
 
-				xRot = (float) -displayData.rotation[2] + 180;
-				yRot = (float) displayData.rotation[1] + 45;
-				zRot = (float) -displayData.rotation[0] - 100;
+				// Sumar traducción
+				xOffset += (float)translation[2] / 16f; // Sumar traducción en X
+				yOffset += (float)translation[1] / 16f; // Sumar traducción en Y
+				zOffset += (float)translation[0] / 16f; // Sumar traducción en Z
+
+				// Rotaciones
+				xRot = (float)-rotation[2] + 180; // Mantener esto igual si necesitas invertir
+				yRot = (float)rotation[1] + 45; // Sumar 45 grados
+				zRot = (float)-rotation[0] - 100; // Mantener esto igual si necesitas invertir
+
 				break;
+
 			case "gui":
 			default:
 				xScale = (float) displayData.scale[2] * 1.6f;

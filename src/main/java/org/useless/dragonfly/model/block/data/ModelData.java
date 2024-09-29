@@ -12,15 +12,18 @@ public class ModelData {
 	public Map<String, PositionData> display;
 	public Map<String, String> textures = new HashMap<>();
 	public CubeData[] elements;
+	public DisplayData displayData;
+
 	public ModelData(){
-		this(null, true, new HashMap<>(), new HashMap<>(), null);
+		this(null, true, new HashMap<>(), null, new HashMap<>(), null);
 	}
-	public ModelData(String parent, boolean ao, Map<String, PositionData> display, Map<String, String> texture, CubeData[] elements){
+	public ModelData(String parent, boolean ao, Map<String, PositionData> display, DisplayData displayData , Map<String, String> texture, CubeData[] elements){
 		this.parent = parent;
 		this.ambientocclusion = ao;
 		this.display = display;
 		this.textures = texture;
 		this.elements = elements;
+		this.displayData = displayData;
 	}
 
 	public static final HashMap<String, Side> keyToSide = new HashMap<>();

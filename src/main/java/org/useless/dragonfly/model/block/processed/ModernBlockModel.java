@@ -1,6 +1,7 @@
 package org.useless.dragonfly.model.block.processed;
 
 import org.useless.dragonfly.helper.ModelHelper;
+import org.useless.dragonfly.model.block.data.DisplayData;
 import org.useless.dragonfly.model.block.data.ModelData;
 import org.useless.dragonfly.model.block.data.PositionData;
 import org.useless.dragonfly.utilities.NamespaceId;
@@ -27,6 +28,8 @@ public class ModernBlockModel {
 	public HashMap<String, String> textureMap;
 	public HashMap<String, PositionData> display;
 	public final NamespaceId namespaceId;
+	public DisplayData displayData;
+
 	public ModernBlockModel(NamespaceId namespaceId){
 		this.namespaceId = namespaceId;
 		refreshModel();
@@ -53,6 +56,7 @@ public class ModernBlockModel {
 		}
 		textureMap.putAll(modelData.textures);
 		display.putAll(modelData.display);
+		displayData = modelData.displayData;
 
 		// Use parent elements if model does not specify its own
 		if (parentModel != null && modelData.elements == null){
