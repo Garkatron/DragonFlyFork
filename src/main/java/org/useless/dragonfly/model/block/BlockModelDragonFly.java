@@ -179,6 +179,21 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				zRot = (guiPositionData != null && guiPositionData.rotation != null) ? (float) guiPositionData.rotation[2] : (float) displayData.rotation[2];
 				break;
 			default:
+				xScale = (float) displayData.scale[2] * 1.6f;
+				yScale = (float) displayData.scale[1] * 1.6f;
+				zScale = (float) displayData.scale[0] * 1.6f;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
+
+				xRot = (float) displayData.rotation[0] - 30;
+				yRot = (float) displayData.rotation[1] + 45;
+				zRot = (float) displayData.rotation[2];
 
 
 		}
