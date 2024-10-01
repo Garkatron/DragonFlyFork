@@ -29,6 +29,7 @@ public class ModernBlockModel {
 	public HashMap<String, PositionData> display;
 	public final NamespaceId namespaceId;
 	public DisplayData displayData;
+	public String currentDisplayMode = "gui";
 
 	public ModernBlockModel(NamespaceId namespaceId){
 		this.namespaceId = namespaceId;
@@ -38,7 +39,6 @@ public class ModernBlockModel {
 		this.modelData = ModelHelper.loadBlockModel(namespaceId);
 		textureMap = new HashMap<>();
 		display = new HashMap<>();
-
 		if (modelData.parent != null){ // Has parent Model
 			String namespace;
 			String modelName;
@@ -50,13 +50,13 @@ public class ModernBlockModel {
 				modelName = modelData.parent;
 			}
 			parentModel = ModelHelper.getOrCreateBlockModel(namespace, modelName );
-
 			textureMap.putAll(parentModel.textureMap);
 			display.putAll(parentModel.display);
+			parentModel.modelData.displayData = modelData.displayData;
+
 		}
 		textureMap.putAll(modelData.textures);
 		display.putAll(modelData.display);
-
 		displayData = modelData.displayData;
 
 		// Use parent elements if model does not specify its own

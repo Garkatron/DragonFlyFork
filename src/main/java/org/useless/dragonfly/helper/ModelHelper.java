@@ -74,6 +74,7 @@ public class ModelHelper {
 	}
 	public static ModelData loadBlockModel(NamespaceId namespaceId){
 		if (modelDataFiles.containsKey(namespaceId)){
+			//System.out.println("dadadadadad");
 			return modelDataFiles.get(namespaceId);
 		}
 		return Objects.requireNonNull(createBlockModel(namespaceId));

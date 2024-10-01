@@ -27,11 +27,7 @@ import org.useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
 import org.useless.dragonfly.utilities.NamespaceId;
 import org.useless.dragonfly.utilities.Utilities;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class BlockModelDragonFly extends BlockModelStandard<Block> {
 	public ModernBlockModel baseModel;
@@ -62,7 +58,7 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 
 	@Override
 	public void renderBlockOnInventory(Tessellator tessellator, int metadata, float brightness, float alpha, @Nullable Integer lightmapCoordinate) {
-        float xOffset;
+		float xOffset;
 		float yOffset;
 		float zOffset;
 		float xScale;
@@ -72,10 +68,11 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 		float yRot;
 		float zRot;
 
-		PositionData displayData = baseModel.getDisplayPosition(DragonFly.renderState);
+		PositionData displayData = baseModel.getDisplayPosition(baseModel.currentDisplayMode);
 		DisplayData customDisplayData = baseModel.displayData;
+		System.out.println("Render State: " + baseModel.currentDisplayMode);
 
-		switch (DragonFly.renderState) {
+		switch (baseModel.currentDisplayMode) {
 			case "ground":
 				PositionData positionData = customDisplayData.getGround();
 
@@ -115,6 +112,7 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 				xRot = (headPositionData != null && headPositionData.rotation != null) ? (float) headPositionData.rotation[0] : (float) displayData.rotation[0];
 				yRot = (headPositionData != null && headPositionData.rotation != null) ? (float) headPositionData.rotation[1] : (float) displayData.rotation[1];
 				zRot = (headPositionData != null && headPositionData.rotation != null) ? (float) headPositionData.rotation[2] : (float) displayData.rotation[2];
+
 				break;
 
 			// Los demás casos siguen el mismo patrón:
@@ -197,9 +195,6 @@ public class BlockModelDragonFly extends BlockModelStandard<Block> {
 
 
 		}
-
-
-
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
